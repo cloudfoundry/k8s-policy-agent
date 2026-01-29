@@ -1,0 +1,12 @@
+resources: ~
+pollInterval: 30s
+
+policyServer:
+  address: https://policy-server.default.svc.cluster.local:4003
+
+image:
+  repository: ghcr.io/cloudfoundry/k8s-policy-agent
+  pullPolicy: IfNotPresent
+  tag: ~
+
+certificateSecret: ~

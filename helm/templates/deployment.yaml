@@ -1,0 +1,62 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: policy-agent
+  labels:
+    app: policy-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: policy-agent
+  template:
+    metadata:
+      labels:
+        app: policy-agent
+    spec:
+      serviceAccountName: policy-agent
+      imagePullSecrets:
+        - name: image-pull-secret
+      containers:
+        - name: policy-agent
+          image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POLICY_SERVER_URL
+              value: {{ .Values.policyServer.address }}
+            - name: POLL_INTERVAL
+              value: {{ .Values.pollInterval }}
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: policy-agent
+              mountPath: /etc/ssl/certs/policy-agent
+      volumes:
+        - name: policy-agent
+          secret:
+            secretName: policy-agent
+{{ if not .Values.certificateSecret }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: policy-agent
+spec:
+  secretName: policy-agent
+  commonName: client
+  dnsNames:
+    - policy-agent
+    - policy-agent.default.svc
+    - policy-agent.default.svc.cluster.local
+  issuerRef:
+    name: ca-issuer
+    kind: ClusterIssuer
+  usages:
+    - key encipherment
+    - digital signature
+    - server auth
+    - client auth
+{{- end }}

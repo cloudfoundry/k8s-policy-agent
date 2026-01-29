@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: staging-pod
+  namespace: cf-workloads
+  labels:
+    app: staging-pod
+    cloudfoundry.org/app-guid: "b4f5e8d5-3c7e-4d3a-9f6e-3f4e5d6c7b8a"
+    cloudfoundry.org/space-guid: "ac3026c1-56f5-4695-b6bc-922ac44dc386"
+    cloudfoundry.org/source-type: "STG"
+spec:
+  containers: 
+  - name: container
+    image: busybox
+    command: ["sleep", "3600"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: running-pod
+  namespace: cf-workloads
+  labels:
+    app: running-pod
+    cloudfoundry.org/app-guid: "b4f5e8d5-3c7e-4d3a-9f6e-3f4e5d6c7b8a"
+    cloudfoundry.org/space-guid: "ac3026c1-56f5-4695-b6bc-922ac44dc386"
+spec:
+  containers: 
+  - name: container
+    image: busybox
+    command: ["sleep", "3600"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: different-space-running-pod
+  namespace: cf-workloads
+  labels:
+    app: different-space-running-pod
+    cloudfoundry.org/app-guid: "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f9a"
+    cloudfoundry.org/space-guid: "91711770-bf70-4cfa-9df2-56e341dfee8a"
+spec:
+  containers: 
+  - name: container
+    image: busybox
+    command: ["sleep", "3600"]
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: different-space-staging-pod
+  namespace: cf-workloads
+  labels:
+    app: different-space-staging-pod
+    cloudfoundry.org/app-guid: "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f9a"
+    cloudfoundry.org/space-guid: "91711770-bf70-4cfa-9df2-56e341dfee8a"
+    cloudfoundry.org/source-type: "STG"
+spec:
+  containers: 
+  - name: container
+    image: busybox
+    command: ["sleep", "3600"]
