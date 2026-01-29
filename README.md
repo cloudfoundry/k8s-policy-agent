@@ -7,3 +7,5 @@
 >
 > This repository should be imported as
 > `code.cloudfoundry.org/k8s-policy-agent`.
+
+Alternative `vxlan-policy-agent` implementation for Kubernetes based on Cilium

@@ -1,0 +1,7 @@
+pollInterval: 1s
+
+image:
+  repository: policy-agent
+  tag: latest
+
+certificateSecret: policy-agent

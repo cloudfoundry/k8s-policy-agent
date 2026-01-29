@@ -1,0 +1,13 @@
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: deny-all-egress
+spec:
+  description: "Deny all egress traffic cluster-wide"
+  endpointSelector:
+    matchExpressions:
+      - key: cloudfoundry.org/app-guid
+        operator: Exists
+  egressDeny:
+   - toCIDRSet:
+      - cidr: 172.0.0.0/24
