@@ -74,19 +74,18 @@ func toPorts(portStr string, protocol ciliumapi.L4Proto) []ciliumapi.PortRule {
 
 		var (
 			startPort string
-			endPort   int
+			endPort   int64
 			err       error
 		)
 		if len(portRange) == 2 {
 			startPort = portRange[0]
-			endPort, err = strconv.Atoi(portRange[1])
+			endPort, err = strconv.ParseInt(portRange[1], 10, 32)
 			if err != nil {
 				continue
 			}
-
 		} else {
 			startPort = portRange[0]
-			endPort, err = strconv.Atoi(portRange[0])
+			endPort, err = strconv.ParseInt(portRange[0], 10, 32)
 			if err != nil {
 				continue
 			}
