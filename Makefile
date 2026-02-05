@@ -65,11 +65,8 @@ certs:
 	echo "subjectAltName=DNS:postgres-postgresql" > ./certs/postgres-tls/san.ext
 	openssl x509 -req -in ./certs/postgres-tls/tls.csr -CA ./certs/ca/ca.crt -CAkey ./certs/ca/ca.key -CAcreateserial -out ./certs/postgres-tls/tls.crt -days 365 -extfile ./certs/postgres-tls/san.ext > /dev/null 2>&1
 
-# integration: kind load-kind install
-# 	go test -v -count=1 ./integration/... -vet=off -args --ginkgo.randomize-all
-# 	@$(MAKE) delete-kind
-
-integration:
-	@echo "Skipping integration tests."
+integration: kind load-kind install
+	go test -v -count=1 ./integration/... -vet=off -args --ginkgo.randomize-all
+	@$(MAKE) delete-kind
 
 .PHONY: build image unit lint generate kind delete-kind load-kind install integration certs

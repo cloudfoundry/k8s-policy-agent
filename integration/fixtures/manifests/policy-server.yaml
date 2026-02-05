@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
         - name: policy-server-internal
-          image: ghcr.io/cloudfoundry/kind-deployment/policy-server:latest
+          image: ghcr.io/cloudfoundry/k8s/policy-server:latest
           imagePullPolicy: Always
           command: [ "/usr/local/bin/policy-server-internal" ]
           args:
