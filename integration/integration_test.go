@@ -317,13 +317,13 @@ func ping(pod string, destination string) bool {
 func shouldHaveHTTPConnectivity(pod string, destination string, expected bool) {
 	Eventually(func() bool {
 		return wgetPort80(pod, destination)
-	}, "2m", "1s").To(Equal(expected))
+	}, "30s", "1s").To(Equal(expected))
 }
 
 func shouldHaveICMPConnectivity(pod string, destination string, expected bool) {
 	Eventually(func() bool {
 		return ping(pod, destination)
-	}, "2m", "1s").To(Equal(expected))
+	}, "30s", "1s").To(Equal(expected))
 }
 
 func waitForWorkloads() {
@@ -352,7 +352,7 @@ func waitForPolicies(expected int) {
 		err := clt.List(context.Background(), policies, &client.ListOptions{})
 		ExpectWithOffset(1, err).NotTo(HaveOccurred())
 		return len(policies.Items)
-	}, "2m", "1s").To(Equal(expected))
+	}, "30s", "1s").To(Equal(expected))
 }
 
 func applyToPostgres(filename string) error {

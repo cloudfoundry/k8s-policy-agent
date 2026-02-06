@@ -101,15 +101,8 @@ jobs:
         echo "GOFLAGS=-gcflags=all=-lang=${GOVERSION}" >> $GITHUB_ENV
     - name: Build image
       run: make image
-    - name: Install the latest version of kind
-      run: |
-        curl -Lo ${{ runner.temp }}/kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
-        chmod +x ${{ runner.temp }}/kind
-        ${{ runner.temp }}/kind version
     - name: Run integration tests
       run: make integration
-      env:
-        KIND: ${{ runner.temp }}/kind
 
   draft-release:
     runs-on: ubuntu-latest
