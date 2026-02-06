@@ -1,5 +1,3 @@
-KIND ?= kind
-
 build:
 	@mkdir -p bin
 	CGO_ENABLED=0 go build -ldflags "-w -s" -trimpath -o bin/runner ./cmd/policy-agent
@@ -22,7 +20,7 @@ else
 endif
 
 kind: certs
-	$(KIND) create cluster --name policy-agent --config="./integration/fixtures/values-files/kind.yaml"
+	kind create cluster --name policy-agent --config="./integration/fixtures/values-files/kind.yaml"
 	kubectl create secret generic policy-agent \
 	  --from-file=tls.crt=./certs/agent-certs/tls.crt \
 	  --from-file=tls.key=./certs/agent-certs/tls.key \
@@ -40,10 +38,10 @@ kind: certs
 	  --namespace default
 
 delete-kind:
-	$(KIND) delete cluster --name policy-agent
+	kind delete cluster --name policy-agent
 
 load-kind: image
-	$(KIND) load docker-image policy-agent:latest --name policy-agent
+	kind load docker-image policy-agent:latest --name policy-agent
 
 install:
 	kubectl create namespace cf-workloads --dry-run=client -o yaml | kubectl apply -f - # idempotent namespace creation
