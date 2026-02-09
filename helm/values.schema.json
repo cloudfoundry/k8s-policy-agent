@@ -3,66 +3,44 @@
   "additionalProperties": false,
   "properties": {
     "certificateSecret": {
-      "default": "",
-      "title": "certificateSecret",
       "type": "string"
     },
     "global": {
-      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
-      "required": [],
-      "title": "global",
       "type": "object"
     },
     "image": {
       "additionalProperties": false,
       "properties": {
         "pullPolicy": {
-          "default": "IfNotPresent",
-          "title": "pullPolicy",
           "type": "string"
         },
         "repository": {
-          "default": "ghcr.io/cloudfoundry/k8s/policy-agent",
-          "title": "repository",
           "type": "string"
         },
         "tag": {
-          "default": "",
-          "title": "tag",
           "type": "string"
         }
       },
-      "required": [
-      ],
-      "title": "image",
       "type": "object"
     },
     "policyServer": {
       "additionalProperties": false,
       "properties": {
         "address": {
-          "default": "https://policy-server.default.svc.cluster.local:4003",
-          "title": "address",
           "type": "string"
         }
       },
       "required": [
         "address"
       ],
-      "title": "policyServer",
       "type": "object"
     },
     "pollInterval": {
-      "default": "30s",
-      "title": "pollInterval",
       "type": "string"
     },
     "resources": {
-      "title": "resources",
       "type": ["object", "null"]
     }
   },
-  "required": [
-  ],
   "type": "object"
 }
