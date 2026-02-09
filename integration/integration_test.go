@@ -56,9 +56,13 @@ var _ = Describe("PolicyAgent", Ordered, func() {
 			ctx := context.Background()
 			Expect(echoContainer.Terminate(ctx)).To(Succeed())
 		}
+
 	})
 
 	AfterEach(func() {
+		if CurrentSpecReport().Failed() {
+			printPolicyAgentLogs()
+		}
 		err := applyToPostgres("./fixtures/sql/cleanup.sql")
 		Expect(err).NotTo(HaveOccurred())
 		waitForPolicies(0)
@@ -367,4 +371,16 @@ func applyToPostgres(filename string) error {
 		return fmt.Errorf("error applying %s: %v, output: %s", filename, err, string(out))
 	}
 	return nil
+}
+
+func printPolicyAgentLogs() {
+	fmt.Println("\n========== Policy Agent Logs ==========")
+	cmd := exec.Command("kubectl", "logs", "-n", "default", "-l", "app=policy-agent", "--tail=100")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("Failed to get policy-agent logs: %v\n", err)
+	} else {
+		fmt.Println(string(out))
+	}
+	fmt.Println("========================================")
 }

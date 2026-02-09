@@ -48,8 +48,9 @@ install:
 	helm upgrade --install --repo https://helm.cilium.io/ cilium cilium --version v1.18.4 --namespace kube-system --wait --values ./integration/fixtures/values-files/cilium-values.yaml
 	kubectl create configmap postgres-init-scripts --from-file=./integration/fixtures/db-init-scripts/ -n default --dry-run=client -o yaml | kubectl apply -f - # idempotent configmap creation
 	helm upgrade --install postgres oci://registry-1.docker.io/bitnamicharts/postgresql --values ./integration/fixtures/values-files/postgres-values.yaml --wait --namespace default
-	helm upgrade --install dev ./helm --values ./integration/fixtures/values-files/policy-agent.yaml --wait --namespace default
 	kubectl apply -f ./integration/fixtures/manifests
+	helm upgrade --install dev ./helm --values ./integration/fixtures/values-files/policy-agent.yaml --wait --namespace default
+	kubectl wait --for=condition=available --timeout=60s deployment/policy-server -n default
 
 certs:
 	mkdir -p certs/ca certs/server-certs certs/agent-certs certs/postgres-tls
