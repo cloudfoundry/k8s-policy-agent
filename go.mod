@@ -5,12 +5,12 @@ go 1.25.0
 tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.59.0
-	code.cloudfoundry.org/policy_client v0.86.0
+	code.cloudfoundry.org/lager/v3 v3.60.0
+	code.cloudfoundry.org/policy_client v0.88.0
 	code.cloudfoundry.org/tlsconfig v0.44.0
 	github.com/cilium/cilium v1.18.6
-	github.com/onsi/ginkgo/v2 v2.27.5
-	github.com/onsi/gomega v1.39.0
+	github.com/onsi/ginkgo/v2 v2.28.1
+	github.com/onsi/gomega v1.39.1
 	github.com/testcontainers/testcontainers-go v0.40.0
 	k8s.io/api v0.35.0
 	k8s.io/apimachinery v0.35.0
@@ -20,7 +20,7 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/cf-networking-helpers v0.71.0 // indirect
+	code.cloudfoundry.org/cf-networking-helpers v0.73.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
@@ -72,7 +72,7 @@ require (
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20260115054156-294ebfa9ad83 // indirect
+	github.com/google/pprof v0.0.0-20260202012954-cb029daf43ef // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
