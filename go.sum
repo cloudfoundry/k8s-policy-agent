@@ -16,6 +16,8 @@ code.cloudfoundry.org/policy_client v0.88.0 h1:Ub33E2xTpC0Bczwm2vBaRCJUP/jh3jlTN
 code.cloudfoundry.org/policy_client v0.88.0/go.mod h1:XOIRu9qSGIdkAc7WN9Kh4Oldf3QdTMHbkraszIGGIPc=
 code.cloudfoundry.org/tlsconfig v0.44.0 h1:YipP4SR67P6omv7TPOpMXjo42bN/4UR4cyjh7GpDuEw=
 code.cloudfoundry.org/tlsconfig v0.44.0/go.mod h1:LGMiYZD1XmqMUkLi58MBkhlmFfQ48MRkhiLi4phAODw=
+code.cloudfoundry.org/tlsconfig v0.45.0 h1:axem2ESLqMm645WyTkw1RZ9zjfZzUiojImNqxGXEtlI=
+code.cloudfoundry.org/tlsconfig v0.45.0/go.mod h1:62TfSYz4O4pgggNLF0wEZOTr2ZtrsnKPX9c2LSL1Cl0=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
 dario.cat/mergo v1.0.2/go.mod h1:E/hbnu0NxMFBjpMIE34DRGLWqDy0g5FuKDhCb31ngxA=
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
