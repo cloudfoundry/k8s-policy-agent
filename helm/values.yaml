@@ -7,9 +7,9 @@ policyServer:
 image:
   repository: ghcr.io/cloudfoundry/k8s/policy-agent
   pullPolicy: IfNotPresent
-  tag: ~
+  tag: ""
 
-certificateSecret: ~
+certificateSecret: ""
 
 nodeSelector: ~
 tolerations: ~
