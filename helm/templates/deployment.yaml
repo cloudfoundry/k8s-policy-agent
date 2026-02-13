@@ -32,7 +32,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: {{ default "policy-agent" .Values.certificateSecret }}
+            - name: policy-agent
               mountPath: /etc/ssl/certs/policy-agent
       {{- if .Values.nodeSelector }}
       nodeSelector:
@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: policy-agent
           secret:
-            secretName: policy-agent
+            secretName: {{ default "policy-agent" .Values.certificateSecret }}
 {{ if not .Values.certificateSecret }}
 ---
 apiVersion: cert-manager.io/v1
