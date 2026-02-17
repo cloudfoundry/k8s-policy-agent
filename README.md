@@ -9,3 +9,9 @@
 > `code.cloudfoundry.org/k8s-policy-agent`.
 
 Alternative `vxlan-policy-agent` implementation for Kubernetes based on Cilium
+
+## Contributing
+
+Please check our [contributing guidelines](/CONTRIBUTING.md).
+
+This project follows [Cloud Foundry Code of Conduct](https://www.cloudfoundry.org/code-of-conduct/).
