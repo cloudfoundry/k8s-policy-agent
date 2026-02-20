@@ -46,25 +46,3 @@ spec:
         - name: policy-agent
           secret:
             secretName: {{ default "policy-agent" .Values.certificateSecret }}
-{{ if not .Values.certificateSecret }}
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: policy-agent
-spec:
-  secretName: policy-agent
-  commonName: client
-  dnsNames:
-    - policy-agent
-    - policy-agent.default.svc
-    - policy-agent.default.svc.cluster.local
-  issuerRef:
-    name: ca-issuer
-    kind: ClusterIssuer
-  usages:
-    - key encipherment
-    - digital signature
-    - server auth
-    - client auth
-{{- end }}
