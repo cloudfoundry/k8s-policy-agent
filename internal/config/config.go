@@ -9,7 +9,7 @@ import (
 
 const (
 	DefaultNamespace             = "cf-workloads"
-	DefaultPollInterval          = 30 * time.Second
+	DefaultPollInterval          = 5 * time.Second
 	DefaultPerPageSecurityGroups = 100
 	DefaultTLSCertPath           = "/etc/ssl/certs/policy-agent/tls.crt"
 	DefaultTLSKeyPath            = "/etc/ssl/certs/policy-agent/tls.key"
