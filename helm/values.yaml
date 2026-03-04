@@ -1,5 +1,5 @@
 resources: ~
-pollInterval: 30s
+pollInterval: 5s
 
 policyServer:
   address: https://policy-server.default.svc.cluster.local:4003
