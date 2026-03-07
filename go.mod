@@ -5,7 +5,7 @@ go 1.25.0
 tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.61.0
+	code.cloudfoundry.org/lager/v3 v3.62.0
 	code.cloudfoundry.org/policy_client v0.91.0
 	code.cloudfoundry.org/tlsconfig v0.46.0
 	github.com/cilium/cilium v1.19.1
@@ -82,7 +82,7 @@ require (
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20260202012954-cb029daf43ef // indirect
+	github.com/google/pprof v0.0.0-20260302011040-a15ffb7f9dcc // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
