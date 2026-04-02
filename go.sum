@@ -6,8 +6,8 @@ code.cloudfoundry.org/lager/v3 v3.64.0 h1:h+wI/FYDp9H702C/AuxOsrGc6nOVA4xCq3FeMt
 code.cloudfoundry.org/lager/v3 v3.64.0/go.mod h1:kbKfKoR3YFCG1GFmpehwecitntPmIWqGF3MjgelUt8Q=
 code.cloudfoundry.org/policy_client v0.91.0 h1:2hkqCu8zzX4mZwdkptjLw0PGayvgBQRs61mgFQA3rKY=
 code.cloudfoundry.org/policy_client v0.91.0/go.mod h1:70kPs/DN09oHwtjxYF+taHmTaYZbWRxwJH2VeJTH9c8=
-code.cloudfoundry.org/tlsconfig v0.46.0 h1:i9F12K8EWBwL5mBd/rUm/rYAV/Ky34lYyoLzngLXAV8=
-code.cloudfoundry.org/tlsconfig v0.46.0/go.mod h1:RsHyB52jxwVeKn1loOEOrgEEA84vTqwFeOq933uVe+g=
+code.cloudfoundry.org/tlsconfig v0.50.0 h1:HzbNSzYcM+c8V1ql1pYaXZGGUGsk6XgLjWSVidHvEIc=
+code.cloudfoundry.org/tlsconfig v0.50.0/go.mod h1:esGzvjLioIRanToEWKLyNMo04xjiH3tX52irs0jjs98=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
 dario.cat/mergo v1.0.2/go.mod h1:E/hbnu0NxMFBjpMIE34DRGLWqDy0g5FuKDhCb31ngxA=
 filippo.io/edwards25519 v1.2.0 h1:crnVqOiS4jqYleHd9vaKZ+HKtHfllngJIiOpNpoJsjo=
@@ -362,8 +362,8 @@ go.opentelemetry.io/otel/trace v1.41.0 h1:Vbk2co6bhj8L59ZJ6/xFTskY+tGAbOnCtQGVVa
 go.opentelemetry.io/otel/trace v1.41.0/go.mod h1:U1NU4ULCoxeDKc09yCWdWe+3QoyweJcISEVa1RBzOis=
 go.opentelemetry.io/proto/otlp v1.7.1 h1:gTOMpGDb0WTBOP8JaO72iL3auEZhVmAQg4ipjOVAtj4=
 go.opentelemetry.io/proto/otlp v1.7.1/go.mod h1:b2rVh6rfI/s2pHWNlB7ILJcRALpcNDzKhACevjI+ZnE=
-go.step.sm/crypto v0.76.2 h1:JJ/yMcs/rmcCAwlo+afrHjq74XBFRTJw5B2y4Q4Z4c4=
-go.step.sm/crypto v0.76.2/go.mod h1:m6KlB/HzIuGFep0UWI5e0SYi38UxpoKeCg6qUaHV6/Q=
+go.step.sm/crypto v0.77.2 h1:qFjjei+RHc5kP5R7NW9OUWT7SqWIuAOvOkXqg4fNWj8=
+go.step.sm/crypto v0.77.2/go.mod h1:W0YJb9onM5l78qgkXIJ2Up6grnwW8EtpCKIza/NCg0o=
 go.uber.org/dig v1.17.1 h1:Tga8Lz8PcYNsWsyHMZ1Vm0OQOUaJNDyvPImgbAu9YSc=
 go.uber.org/dig v1.17.1/go.mod h1:Us0rSJiThwCv2GteUN0Q7OKvU7n5J4dxZ9JKUXozFdE=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
