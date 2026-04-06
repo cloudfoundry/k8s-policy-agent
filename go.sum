@@ -4,8 +4,8 @@ code.cloudfoundry.org/cf-networking-helpers v0.79.0 h1:MhmzJVy5X/SGH2D2904r8JpUj
 code.cloudfoundry.org/cf-networking-helpers v0.79.0/go.mod h1:azazEscatcS06or0uO2TK7o+inusmln20ZvyH7dSnKQ=
 code.cloudfoundry.org/lager/v3 v3.64.0 h1:h+wI/FYDp9H702C/AuxOsrGc6nOVA4xCq3FeMtS5y40=
 code.cloudfoundry.org/lager/v3 v3.64.0/go.mod h1:kbKfKoR3YFCG1GFmpehwecitntPmIWqGF3MjgelUt8Q=
-code.cloudfoundry.org/policy_client v0.95.0 h1:W2HTPtELUJBkoWefB6N2fafgm7K1vHAorhz3sc9k4g0=
-code.cloudfoundry.org/policy_client v0.95.0/go.mod h1:/eaIHJ0V61JSUxGQ3SHZxiABJ5lnoHBxWggcWsRY67c=
+code.cloudfoundry.org/policy_client v0.96.0 h1:Qao5ltP5+ErtLsRSXWnEmIHhIsqawOfmOSAR3jeWe/8=
+code.cloudfoundry.org/policy_client v0.96.0/go.mod h1:IP393auAzXcdoBemdIZYYzonK5YpuaNssHfHvkgEp3E=
 code.cloudfoundry.org/tlsconfig v0.50.0 h1:HzbNSzYcM+c8V1ql1pYaXZGGUGsk6XgLjWSVidHvEIc=
 code.cloudfoundry.org/tlsconfig v0.50.0/go.mod h1:esGzvjLioIRanToEWKLyNMo04xjiH3tX52irs0jjs98=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
@@ -176,8 +176,8 @@ github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/google/gofuzz v1.2.0 h1:xRy4A+RhZaiKjJ1bPfwQ8sedCA+YS2YcCHW6ec7JMi0=
 github.com/google/gofuzz v1.2.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
-github.com/google/pprof v0.0.0-20260302011040-a15ffb7f9dcc h1:VBbFa1lDYWEeV5FZKUiYKYT0VxCp9twUmmaq9eb8sXw=
-github.com/google/pprof v0.0.0-20260302011040-a15ffb7f9dcc/go.mod h1:MxpfABSjhmINe3F1It9d+8exIHFvUqtLIRCdOGNXqiI=
+github.com/google/pprof v0.0.0-20260402051712-545e8a4df936 h1:EwtI+Al+DeppwYX2oXJCETMO23COyaKGP6fHVpkpWpg=
+github.com/google/pprof v0.0.0-20260402051712-545e8a4df936/go.mod h1:MxpfABSjhmINe3F1It9d+8exIHFvUqtLIRCdOGNXqiI=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 h1:X5VWvz21y3gzm9Nw/kaUeku/1+uBhcekkmy4IkffJww=
