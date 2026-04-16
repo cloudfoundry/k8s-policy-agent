@@ -6,8 +6,8 @@ code.cloudfoundry.org/lager/v3 v3.65.0 h1:Z/euENq42rULCPl65R4tdNDWav9AJ6OoZkKfjI
 code.cloudfoundry.org/lager/v3 v3.65.0/go.mod h1:reJ2m/UwSmkU/eJkrgHf4ZEhAMnBuXGiGzLmuDR3D5s=
 code.cloudfoundry.org/policy_client v0.97.0 h1:s3+Z0ZNKdTJSWj04mTDpDelP3kFB/PndY8FQwoswsmc=
 code.cloudfoundry.org/policy_client v0.97.0/go.mod h1:YOoArs6VhpX0Dr01xQcC8bz0LOjCzfVGPgV6KOi63/M=
-code.cloudfoundry.org/tlsconfig v0.50.0 h1:HzbNSzYcM+c8V1ql1pYaXZGGUGsk6XgLjWSVidHvEIc=
-code.cloudfoundry.org/tlsconfig v0.50.0/go.mod h1:esGzvjLioIRanToEWKLyNMo04xjiH3tX52irs0jjs98=
+code.cloudfoundry.org/tlsconfig v0.51.0 h1:thK329gjMwbx+Cj0ZG/9c6jiWTeMAUOekPD3Qwx9g6w=
+code.cloudfoundry.org/tlsconfig v0.51.0/go.mod h1:K7hANtU0m+X/IGEF6IA83KPEE6gKcL/efpltoKVfw+M=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
 dario.cat/mergo v1.0.2/go.mod h1:E/hbnu0NxMFBjpMIE34DRGLWqDy0g5FuKDhCb31ngxA=
 filippo.io/edwards25519 v1.2.0 h1:crnVqOiS4jqYleHd9vaKZ+HKtHfllngJIiOpNpoJsjo=
