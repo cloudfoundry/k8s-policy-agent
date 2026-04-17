@@ -2,7 +2,7 @@ resources: ~
 pollInterval: 5s
 
 policyServer:
-  address: https://policy-server.default.svc.cluster.local:4003
+  address: https://policy-server.{{ .Release.Namespace }}.svc.cluster.local:4003
 
 image:
   repository: ghcr.io/cloudfoundry/k8s/policy-agent
