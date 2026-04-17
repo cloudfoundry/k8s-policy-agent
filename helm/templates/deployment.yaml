@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: POLICY_SERVER_URL
-              value: {{ .Values.policyServer.address }}
+              value: {{ tpl .Values.policyServer.address . }}
             - name: POLL_INTERVAL
               value: {{ .Values.pollInterval }}
           {{- if .Values.resources }}
