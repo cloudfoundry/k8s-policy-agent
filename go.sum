@@ -1,11 +1,11 @@
 cel.dev/expr v0.25.1 h1:1KrZg61W6TWSxuNZ37Xy49ps13NUovb66QLprthtwi4=
 cel.dev/expr v0.25.1/go.mod h1:hrXvqGP6G6gyx8UAHSHJ5RGk//1Oj5nXQ2NI02Nrsg4=
-code.cloudfoundry.org/cf-networking-helpers v0.80.0 h1:BnaLLHL/fKeT5rF17CtOHGR/cBpep9v+IabkkCiI++k=
-code.cloudfoundry.org/cf-networking-helpers v0.80.0/go.mod h1:p9tKGFzzF4yumXtFsbZSBDRKP2/cEaNyVqJh3vFMIak=
+code.cloudfoundry.org/cf-networking-helpers v0.82.0 h1:GTIDxgdWlGpd/o9scVkHGXkubzIUipevRp8bWmINvjs=
+code.cloudfoundry.org/cf-networking-helpers v0.82.0/go.mod h1:3vEr6HaFX58yA+5S92l9WcBKFUT88+io8nD3EM57IWk=
 code.cloudfoundry.org/lager/v3 v3.66.0 h1:OM9Zy+KCTUpanOfIlL4ac87po7VlBZEq+Mdf32VBi/g=
 code.cloudfoundry.org/lager/v3 v3.66.0/go.mod h1:d+HET0t/G9vf8+sxAzhauv313xbfv8molPzY4uNb7vo=
-code.cloudfoundry.org/policy_client v0.97.0 h1:s3+Z0ZNKdTJSWj04mTDpDelP3kFB/PndY8FQwoswsmc=
-code.cloudfoundry.org/policy_client v0.97.0/go.mod h1:YOoArs6VhpX0Dr01xQcC8bz0LOjCzfVGPgV6KOi63/M=
+code.cloudfoundry.org/policy_client v0.99.0 h1:7rc0r+0Ycr5vyi3pTezSrZ3jYrJq1DPUoaWdlh3fyAM=
+code.cloudfoundry.org/policy_client v0.99.0/go.mod h1:WLHo3HfGGoHOiwEura6xZXzfCrPCTgC1x//S4nMhZdY=
 code.cloudfoundry.org/tlsconfig v0.51.0 h1:thK329gjMwbx+Cj0ZG/9c6jiWTeMAUOekPD3Qwx9g6w=
 code.cloudfoundry.org/tlsconfig v0.51.0/go.mod h1:K7hANtU0m+X/IGEF6IA83KPEE6gKcL/efpltoKVfw+M=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
@@ -309,8 +309,8 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
-github.com/tedsuo/ifrit v0.0.0-20230516164442-7862c310ad26 h1:mWCRvpoEMVlslxEvvptKgIUb35va9yj9Oq5wGw/er5I=
-github.com/tedsuo/ifrit v0.0.0-20230516164442-7862c310ad26/go.mod h1:0uD3VMXkZ7Bw0ojGCwDzebBBzPBXtzEZeXai+56BLX4=
+github.com/tedsuo/ifrit v0.0.0-20260418191334-846868129986 h1:etGVMUNp4ZYI0EoO7MxUKTG187RK8tbwIijDcXtSeL4=
+github.com/tedsuo/ifrit v0.0.0-20260418191334-846868129986/go.mod h1:b0WkuWMdITecmKiTvZnmIffiXD+P1TUysIxv8Mm4m/s=
 github.com/testcontainers/testcontainers-go v0.42.0 h1:He3IhTzTZOygSXLJPMX7n44XtK+qhjat1nI9cneBbUY=
 github.com/testcontainers/testcontainers-go v0.42.0/go.mod h1:vZjdY1YmUA1qEForxOIOazfsrdyORJAbhi0bp8plN30=
 github.com/tidwall/gjson v1.18.0 h1:FIDeeyB800efLX89e5a8Y0BNH+LOngJyGrIWxG2FKQY=
