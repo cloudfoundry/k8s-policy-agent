@@ -5,7 +5,7 @@ go 1.25.0
 tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.66.0
+	code.cloudfoundry.org/lager/v3 v3.67.0
 	code.cloudfoundry.org/policy_client v0.99.0
 	code.cloudfoundry.org/tlsconfig v0.52.0
 	github.com/cilium/cilium v1.19.3
