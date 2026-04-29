@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=. \
     CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /bin/agent ./cmd/policy-agent
 
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
