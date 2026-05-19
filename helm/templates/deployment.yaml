@@ -16,8 +16,6 @@ spec:
         app: policy-agent
     spec:
       serviceAccountName: policy-agent
-      imagePullSecrets:
-        - name: image-pull-secret
       containers:
         - name: policy-agent
           image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
