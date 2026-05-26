@@ -5,7 +5,7 @@ go 1.26.0
 tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.70.0
+	code.cloudfoundry.org/lager/v3 v3.71.0
 	code.cloudfoundry.org/policy_client v0.102.0
 	code.cloudfoundry.org/tlsconfig v0.55.0
 	github.com/cilium/cilium v1.19.4
@@ -149,10 +149,10 @@ require (
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
 	golang.org/x/crypto v0.51.0 // indirect
 	golang.org/x/mod v0.36.0 // indirect
-	golang.org/x/net v0.54.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/oauth2 v0.34.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.44.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/term v0.43.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
