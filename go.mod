@@ -7,7 +7,7 @@ tool github.com/maxbrunsfeld/counterfeiter/v6
 require (
 	code.cloudfoundry.org/lager/v3 v3.71.0
 	code.cloudfoundry.org/policy_client v0.104.0
-	code.cloudfoundry.org/tlsconfig v0.55.0
+	code.cloudfoundry.org/tlsconfig v0.56.0
 	github.com/cilium/cilium v1.19.4
 	github.com/onsi/ginkgo/v2 v2.29.0
 	github.com/onsi/gomega v1.41.0
@@ -147,7 +147,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
-	golang.org/x/crypto v0.51.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/mod v0.36.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/oauth2 v0.34.0 // indirect
