@@ -10,7 +10,7 @@ require (
 	code.cloudfoundry.org/tlsconfig v0.60.0
 	github.com/cilium/cilium v1.19.5
 	github.com/onsi/ginkgo/v2 v2.32.0
-	github.com/onsi/gomega v1.42.0
+	github.com/onsi/gomega v1.42.1
 	github.com/testcontainers/testcontainers-go v0.43.0
 	k8s.io/api v0.36.2
 	k8s.io/apimachinery v0.36.2
