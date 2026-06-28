@@ -6,7 +6,7 @@ tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
 	code.cloudfoundry.org/lager/v3 v3.75.0
-	code.cloudfoundry.org/policy_client v0.108.0
+	code.cloudfoundry.org/policy_client v0.109.0
 	code.cloudfoundry.org/tlsconfig v0.60.0
 	github.com/cilium/cilium v1.19.5
 	github.com/onsi/ginkgo/v2 v2.32.0
@@ -20,7 +20,7 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/cf-networking-helpers v0.89.0 // indirect
+	code.cloudfoundry.org/cf-networking-helpers v0.90.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
@@ -156,7 +156,7 @@ require (
 	golang.org/x/term v0.44.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
-	golang.org/x/tools v0.46.0 // indirect
+	golang.org/x/tools v0.47.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
