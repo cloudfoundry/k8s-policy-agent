@@ -1,11 +1,11 @@
 cel.dev/expr v0.25.1 h1:1KrZg61W6TWSxuNZ37Xy49ps13NUovb66QLprthtwi4=
 cel.dev/expr v0.25.1/go.mod h1:hrXvqGP6G6gyx8UAHSHJ5RGk//1Oj5nXQ2NI02Nrsg4=
-code.cloudfoundry.org/cf-networking-helpers v0.94.0 h1:ZeleAtQqBtSXs7Ht0hhYL8XbJbsE5gGkZyw4bbhz0Vo=
-code.cloudfoundry.org/cf-networking-helpers v0.94.0/go.mod h1:ZwAChAxTqDpHK0jJyzzxSsgN5xnKNpYAcCHapPYOv6w=
+code.cloudfoundry.org/cf-networking-helpers v0.95.0 h1:9MANRjJKJU3HJDnPzOh71P/+Dgz2llbLMHo5YpG3gxY=
+code.cloudfoundry.org/cf-networking-helpers v0.95.0/go.mod h1:8UF6k/Q1psRDvmqWyng9PBY/hxxgg+Q6A6/RQ89zFig=
 code.cloudfoundry.org/lager/v3 v3.80.0 h1:TYFCcCQ2lG+kEN+3NJiUvXRhWTsW5Ju14xmV429YaT0=
 code.cloudfoundry.org/lager/v3 v3.80.0/go.mod h1:08ujODr8WeHIekdvjPTMDGTXpbc5lpbPpFbkOTJw6v8=
-code.cloudfoundry.org/policy_client v0.113.0 h1:lgd3EW7chU9BIIhAtPjmfrBytFUMfo/hhw7oEAzmx2w=
-code.cloudfoundry.org/policy_client v0.113.0/go.mod h1:yMtYmrDGrGbvolNA/Rfs23QfN/Ao8j4baDu+vQ/h0Ok=
+code.cloudfoundry.org/policy_client v0.114.0 h1:ea+ECOOkuSbXftVGW2Cx89GuW0YrO3NVPsDI990wxv4=
+code.cloudfoundry.org/policy_client v0.114.0/go.mod h1:cn4Eclw4FdrgzyDtSFURahkYpzZifso9ht6qfm4Vxo0=
 code.cloudfoundry.org/tlsconfig v0.64.0 h1:RfqVhbAyLiF9o5OZpIv7s5wIGY94Orao/EUiiHg4Br4=
 code.cloudfoundry.org/tlsconfig v0.64.0/go.mod h1:lBONCe4dGY95PBY4NGMXNDtmayJHeZyOaXZKGcXWNSw=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
