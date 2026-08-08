@@ -6,7 +6,7 @@ tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
 	code.cloudfoundry.org/lager/v3 v3.80.0
-	code.cloudfoundry.org/policy_client v0.113.0
+	code.cloudfoundry.org/policy_client v0.114.0
 	code.cloudfoundry.org/tlsconfig v0.64.0
 	github.com/cilium/cilium v1.20.0
 	github.com/onsi/ginkgo/v2 v2.32.0
@@ -20,7 +20,7 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/cf-networking-helpers v0.94.0 // indirect
+	code.cloudfoundry.org/cf-networking-helpers v0.95.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
