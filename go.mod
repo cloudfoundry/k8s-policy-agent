@@ -8,7 +8,7 @@ require (
 	code.cloudfoundry.org/lager/v3 v3.81.0
 	code.cloudfoundry.org/policy_client v0.115.0
 	code.cloudfoundry.org/tlsconfig v0.65.0
-	github.com/cilium/cilium v1.20.0
+	github.com/cilium/cilium v1.20.1
 	github.com/onsi/ginkgo/v2 v2.32.1
 	github.com/onsi/gomega v1.42.1
 	github.com/testcontainers/testcontainers-go v0.44.0
