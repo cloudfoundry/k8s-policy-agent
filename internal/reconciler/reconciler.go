@@ -3,37 +3,37 @@ package reconciler
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"code.cloudfoundry.org/k8s-policy-agent/internal/cni"
 	"code.cloudfoundry.org/k8s-policy-agent/internal/config"
 	"code.cloudfoundry.org/k8s-policy-agent/internal/types"
 
 	"code.cloudfoundry.org/lager/v3"
 	policy "code.cloudfoundry.org/policy_client"
-	ciliumv2 "github.com/cilium/cilium/pkg/k8s/apis/cilium.io/v2"
-	slimv1 "github.com/cilium/cilium/pkg/k8s/slim/k8s/apis/meta/v1"
-	ciliumapi "github.com/cilium/cilium/pkg/policy/api"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type networkPolicyReconciler struct {
-	k8sclient client.Client
-	config    *config.Config
-	logger    lager.Logger
+	k8sclient  client.Client
+	config     *config.Config
+	logger     lager.Logger
+	translator cni.Translator
 }
 
 type Reconciler interface {
 	Reconcile(securityGroups []policy.SecurityGroup, networkPolicies []*policy.Policy) error
 }
 
-func New(k8sclient client.Client, config *config.Config, logger lager.Logger) Reconciler {
+func New(k8sclient client.Client, translator cni.Translator, config *config.Config, logger lager.Logger) Reconciler {
 	return &networkPolicyReconciler{
-		k8sclient: k8sclient,
-		config:    config,
-		logger:    logger,
+		k8sclient:  k8sclient,
+		config:     config,
+		logger:     logger,
+		translator: translator,
 	}
 }
 
@@ -62,25 +62,25 @@ func (r *networkPolicyReconciler) Reconcile(securityGroups []policy.SecurityGrou
 	}
 
 	for _, asg := range securityGroups {
-		cnp, err := r.translasteASGtoCiliumNetworkPolicy(asg)
+		netpol, err := r.translator.TranslateASG(asg)
 		if err != nil {
 			return fmt.Errorf("not able to translate ASG '%v': %w", asg, err)
 		}
 
-		if err := r.createOrUpdateNetworkPolicy(cnp); err != nil {
-			r.logger.Error("failed to create/update CiliumNetworkPolicy", err, lager.Data{"asg_name": asg.Name})
+		if err := r.createOrUpdateNetworkPolicy(netpol); err != nil {
+			r.logger.Error("failed to create/update network policy", err, lager.Data{"asg_name": asg.Name})
 			return err
 		}
 	}
 
 	for sourceID, destinations := range aggregatePolicies {
-		cnp, err := r.translatePolicyToCiliumNetworkPolicy(sourceID, destinations)
+		netpol, err := r.translator.TranslatePolicy(sourceID, destinations)
 		if err != nil {
 			return fmt.Errorf("not able to translate Policy for app %q: %w", sourceID, err)
 		}
 
-		if err := r.createOrUpdateNetworkPolicy(cnp); err != nil {
-			r.logger.Error("failed to create/update CiliumNetworkPolicy", err, lager.Data{"policy_source_id": sourceID})
+		if err := r.createOrUpdateNetworkPolicy(netpol); err != nil {
+			r.logger.Error("failed to create/update network policy", err, lager.Data{"policy_source_id": sourceID})
 			return err
 		}
 	}
@@ -89,7 +89,7 @@ func (r *networkPolicyReconciler) Reconcile(securityGroups []policy.SecurityGrou
 }
 
 func (r *networkPolicyReconciler) removeObsoleteNetworkPolicies(currentGUIDs map[string]struct{}) error {
-	policies := &ciliumv2.CiliumNetworkPolicyList{}
+	policies := r.translator.GetListType()
 	if err := r.k8sclient.List(context.Background(), policies, &client.ListOptions{
 		LabelSelector: labels.SelectorFromValidatedSet(map[string]string{types.NetworkPoliciesAppLabelKey: types.NetworkPoliciesAppLabelValue}),
 	}); err != nil {
@@ -97,141 +97,54 @@ func (r *networkPolicyReconciler) removeObsoleteNetworkPolicies(currentGUIDs map
 		return err
 	}
 
-	// Delete only policies whose names (GUIDs) are not in the current security groups
-	for _, policy := range policies.Items {
-		if _, exists := currentGUIDs[policy.Name]; !exists {
-			err := r.k8sclient.Delete(context.Background(), &policy)
+	return meta.EachListItem(policies, func(obj runtime.Object) error {
+		accessor, err := meta.Accessor(obj)
+		if err != nil {
+			return fmt.Errorf("failed to cast object to client.Object: %w", err)
+		}
+
+		if _, exists := currentGUIDs[accessor.GetName()]; !exists {
+			err := r.k8sclient.Delete(context.Background(), accessor.(client.Object))
 			if err != nil {
-				r.logger.Error("failed to delete obsolete CiliumNetworkPolicy", err, lager.Data{"policy_name": policy.Name})
+				r.logger.Error("failed to delete obsolete CiliumNetworkPolicy", err, lager.Data{"policy_name": accessor.GetName()})
 				return err
 			}
-			r.logger.Info("deleted obsolete CiliumNetworkPolicy", lager.Data{"policy_name": policy.Name})
-		}
-	}
-
-	return nil
-}
-
-func (r *networkPolicyReconciler) translasteASGtoCiliumNetworkPolicy(asg policy.SecurityGroup) (*ciliumv2.CiliumNetworkPolicy, error) {
-	egressRules := CreateCiliumEgressRulesFromASG(asg.Rules)
-
-	specs := ciliumapi.Rules{}
-	for _, selector := range CreateCiliumEgressSelectorsFromASG(asg) {
-		specs = append(specs,
-			&ciliumapi.Rule{
-				Egress:           egressRules,
-				EndpointSelector: ciliumapi.EndpointSelector{LabelSelector: &selector},
-			},
-		)
-	}
-
-	if len(specs) == 0 {
-		return nil, fmt.Errorf("no specs created")
-	}
-
-	cnp := &ciliumv2.CiliumNetworkPolicy{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      asg.Guid,
-			Namespace: r.config.Namespace,
-			Labels: map[string]string{
-				types.NetworkPoliciesAppLabelKey:      types.NetworkPoliciesAppLabelValue,
-				types.NetworkPoliciesRuleNameLabelKey: asg.Name,
-			},
-		},
-		Specs: specs,
-	}
-	return cnp, nil
-}
-
-func (r *networkPolicyReconciler) translatePolicyToCiliumNetworkPolicy(sourceID string, destinationMap map[string][]policy.Destination) (*ciliumv2.CiliumNetworkPolicy, error) {
-	egressRules := []ciliumapi.EgressRule{}
-	for destinationID, destinations := range destinationMap {
-		egressRule := ciliumapi.EgressRule{
-			EgressCommonRule: ciliumapi.EgressCommonRule{
-				ToEndpoints: []ciliumapi.EndpointSelector{
-					{
-						LabelSelector: &slimv1.LabelSelector{
-							MatchLabels: map[string]string{
-								"cloudfoundry.org/app-guid": destinationID,
-							},
-						},
-					},
-				},
-			},
-			ToPorts: ciliumapi.PortRules{
-				{
-					Ports: []ciliumapi.PortProtocol{},
-				},
-			},
+			r.logger.Info("deleted obsolete CiliumNetworkPolicy", lager.Data{"policy_name": accessor.GetName()})
 		}
 
-		for _, dest := range destinations {
-			egressRule.ToPorts[0].Ports = append(egressRule.ToPorts[0].Ports, ciliumapi.PortProtocol{
-				Port:     fmt.Sprintf("%d", dest.Ports.Start),
-				EndPort:  int32(dest.Ports.End),
-				Protocol: ciliumapi.L4Proto(strings.ToUpper(dest.Protocol)),
-			})
-		}
-
-		egressRules = append(egressRules, egressRule)
-	}
-
-	return &ciliumv2.CiliumNetworkPolicy{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("c2c-%s", sourceID),
-			Namespace: r.config.Namespace,
-			Labels: map[string]string{
-				types.NetworkPoliciesAppLabelKey: types.NetworkPoliciesAppLabelValue,
-			},
-		},
-		Specs: ciliumapi.Rules{
-			&ciliumapi.Rule{
-				EndpointSelector: ciliumapi.EndpointSelector{
-					LabelSelector: &slimv1.LabelSelector{
-						MatchLabels: map[string]string{
-							"cloudfoundry.org/app-guid": sourceID,
-						},
-					},
-				},
-				Egress: egressRules,
-			},
-		},
-	}, nil
+		return nil
+	})
 }
 
-func (r *networkPolicyReconciler) createOrUpdateNetworkPolicy(cnp *ciliumv2.CiliumNetworkPolicy) error {
-	existing := &ciliumv2.CiliumNetworkPolicy{}
-	if err := r.k8sclient.Get(context.Background(), client.ObjectKeyFromObject(cnp), existing); err != nil {
+func (r *networkPolicyReconciler) createOrUpdateNetworkPolicy(obj client.Object) error {
+	existing := obj.DeepCopyObject().(client.Object)
+	if err := r.k8sclient.Get(context.Background(), client.ObjectKeyFromObject(obj), existing); err != nil {
 		if !apierrors.IsNotFound(err) {
 			r.logger.Error("failed to get existing CiliumNetworkPolicy", err)
 			return err
 		}
 
-		if err := r.k8sclient.Create(context.Background(), cnp); err != nil {
+		if err := r.k8sclient.Create(context.Background(), obj); err != nil {
 			r.logger.Error("failed to create CiliumNetworkPolicy", err)
 			return err
 		}
 
-		r.logger.Info("created CiliumNetworkPolicy", lager.Data{"asg_guid": cnp.Name})
+		r.logger.Info("created CiliumNetworkPolicy", lager.Data{"asg_guid": obj.GetName()})
 		return nil
 	}
 
-	cnp.ResourceVersion = existing.ResourceVersion
+	obj.SetResourceVersion(existing.GetResourceVersion())
 
-	if specsEqual(existing, cnp) {
-		r.logger.Debug("unchanged CiliumNetworkPolicy, no update necessary", lager.Data{"asg_guid": cnp.Name})
+	if r.translator.Equals(existing, obj) {
+		r.logger.Debug("unchanged CiliumNetworkPolicy, no update necessary", lager.Data{"asg_guid": obj.GetName()})
 		return nil
 	}
 
-	if err := r.k8sclient.Update(context.Background(), cnp); err != nil {
+	if err := r.k8sclient.Update(context.Background(), obj); err != nil {
 		r.logger.Error("failed to update CiliumNetworkPolicy", err)
 		return err
 	}
 
-	r.logger.Debug("updated CiliumNetworkPolicy", lager.Data{"asg_guid": cnp.Name})
+	r.logger.Debug("updated CiliumNetworkPolicy", lager.Data{"asg_guid": obj.GetName()})
 	return nil
-}
-
-func specsEqual(a, b *ciliumv2.CiliumNetworkPolicy) bool {
-	return a.Specs.DeepEqual(&b.Specs)
 }

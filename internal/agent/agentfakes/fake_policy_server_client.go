@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"code.cloudfoundry.org/k8s-policy-agent/internal/agent"
-
 	"code.cloudfoundry.org/policy_client"
 )
 

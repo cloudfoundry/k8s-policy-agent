@@ -1,21 +1,148 @@
-package reconciler
+package cilium
 
 import (
 	"errors"
 	"fmt"
 	"log"
-	"math/bits"
-	"net"
 	"strconv"
 	"strings"
 
+	"code.cloudfoundry.org/k8s-policy-agent/internal/cni/util"
+	"code.cloudfoundry.org/k8s-policy-agent/internal/types"
+	"code.cloudfoundry.org/policy_client"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/utils/ptr"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+
 	policy "code.cloudfoundry.org/policy_client"
+	ciliumv2 "github.com/cilium/cilium/pkg/k8s/apis/cilium.io/v2"
 	slimv1 "github.com/cilium/cilium/pkg/k8s/slim/k8s/apis/meta/v1"
 	ciliumapi "github.com/cilium/cilium/pkg/policy/api"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 )
 
-func CreateCiliumEgressRulesFromASG(asgRules []policy.SecurityGroupRule) []ciliumapi.EgressRule {
+type translator struct {
+	namespace string
+}
+
+func NewTranslator(namespace string) *translator {
+	return &translator{
+		namespace: namespace,
+	}
+}
+
+// AddToScheme implements [cni.Translator].
+func (t *translator) AddToScheme(scheme *runtime.Scheme) {
+	utilruntime.Must(ciliumv2.AddToScheme(scheme))
+}
+
+// Equals implements [cni.Translator].
+func (t *translator) Equals(a client.Object, b client.Object) bool {
+	return a.(*ciliumv2.CiliumNetworkPolicy).Specs.DeepEqual(ptr.To(b.(*ciliumv2.CiliumNetworkPolicy).Specs))
+}
+
+// GetListType implements [cni.Translator].
+func (t *translator) GetListType() client.ObjectList {
+	return &ciliumv2.CiliumNetworkPolicyList{}
+}
+
+// GetType implements [cni.Translator].
+func (t *translator) GetType() client.Object {
+	return &ciliumv2.CiliumNetworkPolicy{}
+}
+
+// TranslateASG implements [cni.Translator].
+func (t *translator) TranslateASG(asg policy_client.SecurityGroup) (client.Object, error) {
+	egressRules := createCiliumEgressRulesFromASG(asg.Rules)
+
+	specs := ciliumapi.Rules{}
+	for _, selector := range createCiliumEgressSelectorsFromASG(asg) {
+		specs = append(specs,
+			&ciliumapi.Rule{
+				Egress:           egressRules,
+				EndpointSelector: ciliumapi.EndpointSelector{LabelSelector: &selector},
+			},
+		)
+	}
+
+	if len(specs) == 0 {
+		return nil, fmt.Errorf("no specs created")
+	}
+
+	cnp := &ciliumv2.CiliumNetworkPolicy{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      asg.Guid,
+			Namespace: t.namespace,
+			Labels: map[string]string{
+				types.NetworkPoliciesAppLabelKey:      types.NetworkPoliciesAppLabelValue,
+				types.NetworkPoliciesRuleNameLabelKey: asg.Name,
+			},
+		},
+		Specs: specs,
+	}
+	return cnp, nil
+}
+
+// TranslatePolicy implements [cni.Translator].
+func (t *translator) TranslatePolicy(sourceID string, destinationMap map[string][]policy_client.Destination) (client.Object, error) {
+	egressRules := []ciliumapi.EgressRule{}
+	for destinationID, destinations := range destinationMap {
+		egressRule := ciliumapi.EgressRule{
+			EgressCommonRule: ciliumapi.EgressCommonRule{
+				ToEndpoints: []ciliumapi.EndpointSelector{
+					{
+						LabelSelector: &slimv1.LabelSelector{
+							MatchLabels: map[string]string{
+								"cloudfoundry.org/app-guid": destinationID,
+							},
+						},
+					},
+				},
+			},
+			ToPorts: ciliumapi.PortRules{
+				{
+					Ports: []ciliumapi.PortProtocol{},
+				},
+			},
+		}
+
+		for _, dest := range destinations {
+			egressRule.ToPorts[0].Ports = append(egressRule.ToPorts[0].Ports, ciliumapi.PortProtocol{
+				Port:     fmt.Sprintf("%d", dest.Ports.Start),
+				EndPort:  int32(dest.Ports.End),
+				Protocol: ciliumapi.L4Proto(strings.ToUpper(dest.Protocol)),
+			})
+		}
+
+		egressRules = append(egressRules, egressRule)
+	}
+
+	return &ciliumv2.CiliumNetworkPolicy{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      fmt.Sprintf("c2c-%s", sourceID),
+			Namespace: t.namespace,
+			Labels: map[string]string{
+				types.NetworkPoliciesAppLabelKey: types.NetworkPoliciesAppLabelValue,
+			},
+		},
+		Specs: ciliumapi.Rules{
+			&ciliumapi.Rule{
+				EndpointSelector: ciliumapi.EndpointSelector{
+					LabelSelector: &slimv1.LabelSelector{
+						MatchLabels: map[string]string{
+							"cloudfoundry.org/app-guid": sourceID,
+						},
+					},
+				},
+				Egress: egressRules,
+			},
+		},
+	}, nil
+}
+
+func createCiliumEgressRulesFromASG(asgRules []policy.SecurityGroupRule) []ciliumapi.EgressRule {
 	var ciliumEgressRules []ciliumapi.EgressRule
 
 	for _, rule := range asgRules {
@@ -107,7 +234,7 @@ func icmpRule(icmpType int, ipFamily ...string) ciliumapi.ICMPRules {
 
 	for _, family := range ipFamily {
 		if icmpType == -1 {
-			for _, typeNum := range GetIcmpTypes(family) {
+			for _, typeNum := range getIcmpTypes(family) {
 				rule.Fields = append(rule.Fields, ciliumapi.ICMPField{
 					Family: family,
 					Type: &intstr.IntOrString{
@@ -130,7 +257,7 @@ func icmpRule(icmpType int, ipFamily ...string) ciliumapi.ICMPRules {
 	return ciliumapi.ICMPRules{rule}
 }
 
-func GetIcmpTypes(ipFamily string) []int32 {
+func getIcmpTypes(ipFamily string) []int32 {
 	if ipFamily == ciliumapi.IPv4Family {
 		return []int32{
 			0,  // EchoReply
@@ -199,98 +326,21 @@ func translateToCidrs(destination string) ([]ciliumapi.CIDR, error) {
 
 // converts an IP range (e.g., "169.255.0.0-172.15.255.255") to minimal set of CIDRs
 func ipRangeToCIDRs(ipRange string) ([]ciliumapi.CIDR, error) {
-	parts := strings.SplitN(ipRange, "-", 2)
-	if len(parts) != 2 {
-		return nil, fmt.Errorf("invalid IP range format: %s", ipRange)
+	ranges, err := util.RangeToCIDRs(ipRange)
+	if err != nil {
+		return nil, err
 	}
 
-	startIP := net.ParseIP(strings.TrimSpace(parts[0]))
-	endIP := net.ParseIP(strings.TrimSpace(parts[1]))
-
-	if startIP == nil || endIP == nil {
-		return nil, fmt.Errorf("invalid IP addresses in range: %s", ipRange)
+	cidrs := make([]ciliumapi.CIDR, len(ranges))
+	for i, r := range ranges {
+		cidrs[i] = ciliumapi.CIDR(r)
 	}
 
-	startIP = startIP.To4()
-	endIP = endIP.To4()
-
-	if startIP == nil || endIP == nil {
-		return nil, fmt.Errorf("only IPv4 ranges are supported: %s", ipRange)
-	}
-
-	startInt := ipToUint32(startIP)
-	endInt := ipToUint32(endIP)
-
-	if startInt > endInt {
-		return nil, fmt.Errorf("start IP is greater than end IP: %s", ipRange)
-	}
-
-	return rangeToCIDRs(startInt, endInt), nil
+	return cidrs, nil
 }
 
-// ipToUint32 converts an IPv4 address to a 32-bit unsigned integer
-func ipToUint32(ip net.IP) uint32 {
-	return uint32(ip[0])<<24 | uint32(ip[1])<<16 | uint32(ip[2])<<8 | uint32(ip[3])
-}
-
-// uint32ToIP converts a 32-bit unsigned integer to an IPv4 address
-func uint32ToIP(n uint32) net.IP {
-	return net.IPv4(byte(n>>24), byte(n>>16), byte(n>>8), byte(n))
-}
-
-// rangeToCIDRs converts an IP range (as uint32) to minimal set of CIDRs
-// This uses an efficient algorithm that finds the largest aligned CIDR block
-// that fits at the start of the range, then recursively processes the remainder
-func rangeToCIDRs(start, end uint32) []ciliumapi.CIDR {
-	var cidrs []ciliumapi.CIDR
-
-	for start <= end {
-		// Find the maximum prefix length where start is aligned
-		// (i.e., how many trailing zeros in the binary representation)
-		maxPrefixLen := 32
-		if start != 0 {
-			maxPrefixLen = bits.TrailingZeros32(start)
-		}
-
-		// Calculate how many IPs we can cover from start to end
-		// Use uint64 to avoid overflow when end=0xFFFFFFFF and start=0
-		rangeSize := uint64(end) - uint64(start) + 1
-
-		// Find the largest CIDR block (smallest prefix) that:
-		// 1. Is aligned with start (respects maxPrefixLen)
-		// 2. Doesn't exceed the remaining range
-		prefixLen := 32
-		for p := maxPrefixLen; p >= 0; p-- {
-			blockSize := uint64(1) << p
-			if blockSize <= rangeSize {
-				prefixLen = 32 - p
-				break
-			}
-		}
-
-		// Create CIDR notation
-		cidr := ciliumapi.CIDR(fmt.Sprintf("%s/%d", uint32ToIP(start).String(), prefixLen))
-		cidrs = append(cidrs, cidr)
-
-		// if prefixLen is 0, we've covered the entire address space
-		if prefixLen == 0 {
-			break
-		}
-
-		// Move to the next block
-		blockSize := uint32(1) << (32 - prefixLen)
-		if start > 0xFFFFFFFF-blockSize {
-			// Prevent overflow
-			break
-		}
-		start += blockSize
-	}
-
-	return cidrs
-}
-
-// CreateCiliumEgressSelectorFromASG creates an endpoint selector based on ASG metadata
-func CreateCiliumEgressSelectorsFromASG(asg policy.SecurityGroup) []slimv1.LabelSelector {
+// createCiliumEgressSelectorsFromASG creates an endpoint selector based on ASG metadata
+func createCiliumEgressSelectorsFromASG(asg policy.SecurityGroup) []slimv1.LabelSelector {
 	selectors := []slimv1.LabelSelector{}
 
 	if asg.StagingDefault {
@@ -343,5 +393,6 @@ func CreateCiliumEgressSelectorsFromASG(asg policy.SecurityGroup) []slimv1.Label
 			},
 		})
 	}
+
 	return selectors
 }
