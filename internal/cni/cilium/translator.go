@@ -9,7 +9,6 @@ import (
 
 	"code.cloudfoundry.org/k8s-policy-agent/internal/cni/util"
 	"code.cloudfoundry.org/k8s-policy-agent/internal/types"
-	"code.cloudfoundry.org/policy_client"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/utils/ptr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -54,7 +53,7 @@ func (t *translator) GetType() client.Object {
 }
 
 // TranslateASG implements [cni.Translator].
-func (t *translator) TranslateASG(asg policy_client.SecurityGroup) (client.Object, error) {
+func (t *translator) TranslateASG(asg policy.SecurityGroup) (client.Object, error) {
 	egressRules := createCiliumEgressRulesFromASG(asg.Rules)
 
 	specs := ciliumapi.Rules{}
@@ -86,7 +85,7 @@ func (t *translator) TranslateASG(asg policy_client.SecurityGroup) (client.Objec
 }
 
 // TranslatePolicy implements [cni.Translator].
-func (t *translator) TranslatePolicy(sourceID string, destinationMap map[string][]policy_client.Destination) (client.Object, error) {
+func (t *translator) TranslatePolicy(sourceID string, destinationMap map[string][]policy.Destination) (client.Object, error) {
 	egressRules := []ciliumapi.EgressRule{}
 	for destinationID, destinations := range destinationMap {
 		egressRule := ciliumapi.EgressRule{
@@ -342,6 +341,15 @@ func ipRangeToCIDRs(ipRange string) ([]ciliumapi.CIDR, error) {
 // createCiliumEgressSelectorsFromASG creates an endpoint selector based on ASG metadata
 func createCiliumEgressSelectorsFromASG(asg policy.SecurityGroup) []slimv1.LabelSelector {
 	selectors := []slimv1.LabelSelector{}
+
+	if asg.StagingDefault && asg.RunningDefault {
+		return []slimv1.LabelSelector{{
+			MatchExpressions: []slimv1.LabelSelectorRequirement{{
+				Key:      "cloudfoundry.org/app-guid",
+				Operator: slimv1.LabelSelectorOpExists,
+			}},
+		}}
+	}
 
 	if asg.StagingDefault {
 		selectors = append(selectors, slimv1.LabelSelector{
