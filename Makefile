@@ -37,9 +37,9 @@ load-kind: image
 install-calico:
 	helm template calico-crds crd.projectcalico.org.v1 --repo https://docs.tigera.io/calico/charts --version ${CALICO_VERSION} | kubectl apply --server-side -f -
 	helm upgrade --install tigeraoperator tigera-operator --repo https://docs.tigera.io/calico/charts --version ${CALICO_VERSION} --namespace tigera-operator --create-namespace --wait --values ./integration/fixtures/values-files/calico-values.yaml
-	echo "Waiting for nodes to become ready after CNI installation..."
+	echo "Waiting for nodes and calico pods to become ready after CNI installation..."
 	kubectl wait --for=condition=Ready nodes --all --timeout=300s
-	kubectl wait --for=condition=Ready pods -l k8s-app=calico-apiserver -n calico-system --timeout=300s
+	kubectl wait --for=condition=Ready pods --all -n calico-system --timeout=300s
 	kubectl apply -f ./integration/fixtures/manifests/calico-deny-all-egress-policy.yaml
 
 install-cilium:

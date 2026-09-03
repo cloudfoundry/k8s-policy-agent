@@ -106,10 +106,10 @@ func (r *networkPolicyReconciler) removeObsoleteNetworkPolicies(currentGUIDs map
 		if _, exists := currentGUIDs[accessor.GetName()]; !exists {
 			err := r.k8sclient.Delete(context.Background(), accessor.(client.Object))
 			if err != nil {
-				r.logger.Error("failed to delete obsolete CiliumNetworkPolicy", err, lager.Data{"policy_name": accessor.GetName()})
+				r.logger.Error("failed to delete obsolete NetworkPolicy", err, lager.Data{"policy_name": accessor.GetName()})
 				return err
 			}
-			r.logger.Info("deleted obsolete CiliumNetworkPolicy", lager.Data{"policy_name": accessor.GetName()})
+			r.logger.Info("deleted obsolete NetworkPolicy", lager.Data{"policy_name": accessor.GetName()})
 		}
 
 		return nil
@@ -120,31 +120,31 @@ func (r *networkPolicyReconciler) createOrUpdateNetworkPolicy(obj client.Object)
 	existing := obj.DeepCopyObject().(client.Object)
 	if err := r.k8sclient.Get(context.Background(), client.ObjectKeyFromObject(obj), existing); err != nil {
 		if !apierrors.IsNotFound(err) {
-			r.logger.Error("failed to get existing CiliumNetworkPolicy", err)
+			r.logger.Error("failed to get existing NetworkPolicy", err)
 			return err
 		}
 
 		if err := r.k8sclient.Create(context.Background(), obj); err != nil {
-			r.logger.Error("failed to create CiliumNetworkPolicy", err)
+			r.logger.Error("failed to create NetworkPolicy", err)
 			return err
 		}
 
-		r.logger.Info("created CiliumNetworkPolicy", lager.Data{"asg_guid": obj.GetName()})
+		r.logger.Info("created NetworkPolicy", lager.Data{"asg_guid": obj.GetName()})
 		return nil
 	}
 
 	obj.SetResourceVersion(existing.GetResourceVersion())
 
 	if r.translator.Equals(existing, obj) {
-		r.logger.Debug("unchanged CiliumNetworkPolicy, no update necessary", lager.Data{"asg_guid": obj.GetName()})
+		r.logger.Debug("unchanged NetworkPolicy, no update necessary", lager.Data{"asg_guid": obj.GetName()})
 		return nil
 	}
 
 	if err := r.k8sclient.Update(context.Background(), obj); err != nil {
-		r.logger.Error("failed to update CiliumNetworkPolicy", err)
+		r.logger.Error("failed to update NetworkPolicy", err)
 		return err
 	}
 
-	r.logger.Debug("updated CiliumNetworkPolicy", lager.Data{"asg_guid": obj.GetName()})
+	r.logger.Debug("updated NetworkPolicy", lager.Data{"asg_guid": obj.GetName()})
 	return nil
 }
