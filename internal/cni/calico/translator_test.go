@@ -106,7 +106,7 @@ var _ = Describe("Translator", func() {
 
 		It("creates selectors for running and staging spaces", func() {
 			translated := translate(policy.SecurityGroup{Guid: "guid", RunningSpaceGuids: []string{"guid1", "guid2"}, StagingSpaceGuids: []string{"guid1"}, Rules: []policy.SecurityGroupRule{{Destination: "10.0.0.1", Protocol: "all"}}})
-			Expect(translated.Spec.Selector).To(Equal(`(cloudfoundry.org/space-guid in {"guid1", "guid2"} && cloudfoundry.org/source-type != "STG") || (cloudfoundry.org/space-guid in {"guid1"} && cloudfoundry.org/source-type != "STG")`))
+			Expect(translated.Spec.Selector).To(Equal(`(cloudfoundry.org/space-guid in {"guid1", "guid2"} && cloudfoundry.org/source-type != "STG") || (cloudfoundry.org/space-guid in {"guid1"} && cloudfoundry.org/source-type == "STG")`))
 		})
 	})
 })
