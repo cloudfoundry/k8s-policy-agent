@@ -1,5 +1,5 @@
-CILIUM_VERSION=v1.18.4
-CALICO_VERSION=v3.32.2
+CILIUM_VERSION := v1.20.1
+CALICO_VERSION := v3.32.2
 
 build:
 	@mkdir -p bin
