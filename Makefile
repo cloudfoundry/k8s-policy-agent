@@ -1,3 +1,6 @@
+CILIUM_VERSION=v1.18.4
+CALICO_VERSION=v3.32.2
+
 build:
 	@mkdir -p bin
 	CGO_ENABLED=0 go build -ldflags "-w -s" -trimpath -o bin/runner ./cmd/policy-agent
@@ -19,9 +22,35 @@ else
 	docker build -t policy-agent:latest .
 endif
 
-kind: certs
-	kind create cluster --name policy-agent --config="./integration/fixtures/values-files/kind.yaml"
-	kubectl create secret generic policy-agent \
+kind-calico: certs
+	kind create cluster --name policy-agent --config="./integration/fixtures/values-files/calico-kind.yaml"
+
+kind-cilium: certs
+	kind create cluster --name policy-agent --config="./integration/fixtures/values-files/cilium-kind.yaml"
+
+delete-kind:
+	kind delete cluster --name policy-agent
+
+load-kind: image
+	kind load docker-image policy-agent:latest --name policy-agent
+
+install-calico:
+	helm template calico-crds crd.projectcalico.org.v1 --repo https://docs.tigera.io/calico/charts --version ${CALICO_VERSION} | kubectl apply --server-side -f -
+	helm upgrade --install tigeraoperator tigera-operator --repo https://docs.tigera.io/calico/charts --version ${CALICO_VERSION} --namespace tigera-operator --create-namespace --wait --values ./integration/fixtures/values-files/calico-values.yaml
+	echo "Waiting for nodes to become ready after CNI installation..."
+	kubectl wait --for=condition=Ready nodes --all --timeout=300s
+	kubectl wait --for=condition=Ready pods -l k8s-app=calico-apiserver -n calico-system --timeout=300s
+	kubectl apply -f ./integration/fixtures/manifests/calico-deny-all-egress-policy.yaml
+
+install-cilium:
+	helm upgrade --install --repo https://helm.cilium.io/ cilium cilium --version ${CILIUM_VERSION} --namespace kube-system --wait --values ./integration/fixtures/values-files/cilium-values.yaml
+	echo "Waiting for nodes to become ready after CNI installation..."
+	kubectl wait --for=condition=Ready nodes --all --timeout=300s
+	kubectl apply -f ./integration/fixtures/manifests/cilium-deny-all-egress-policy.yaml
+
+setup-integration-tests:
+	kubectl create namespace cf-workloads --dry-run=client -o yaml | kubectl apply -f - # idempotent namespace creation
+		kubectl create secret generic policy-agent \
 	  --from-file=tls.crt=./certs/agent-certs/tls.crt \
 	  --from-file=tls.key=./certs/agent-certs/tls.key \
 	  --from-file=ca.crt=./certs/ca/ca.crt \
@@ -36,21 +65,9 @@ kind: certs
 	  --from-file=tls.key=./certs/postgres-tls/tls.key \
 	  --from-file=ca.crt=./certs/ca/ca.crt \
 	  --namespace default
-
-delete-kind:
-	kind delete cluster --name policy-agent
-
-load-kind: image
-	kind load docker-image policy-agent:latest --name policy-agent
-
-install:
-	kubectl create namespace cf-workloads --dry-run=client -o yaml | kubectl apply -f - # idempotent namespace creation
-	helm upgrade --install --repo https://helm.cilium.io/ cilium cilium --version v1.18.4 --namespace kube-system --wait --values ./integration/fixtures/values-files/cilium-values.yaml
 	kubectl create configmap postgres-init-scripts --from-file=./integration/fixtures/db-init-scripts/ -n default --dry-run=client -o yaml | kubectl apply -f - # idempotent configmap creation
 	helm upgrade --install postgres oci://registry-1.docker.io/bitnamicharts/postgresql --values ./integration/fixtures/values-files/postgres-values.yaml --wait --namespace default
-	kubectl apply -f ./integration/fixtures/manifests
-	helm upgrade --install dev ./helm --values ./integration/fixtures/values-files/policy-agent.yaml --wait --namespace default
-	kubectl wait --for=condition=available --timeout=60s deployment/policy-server -n default
+	kubectl apply -f ./integration/fixtures/manifests/metron-service.yaml -f ./integration/fixtures/manifests/policy-server.yaml -f ./integration/fixtures/manifests/workloads.yaml
 
 certs:
 	mkdir -p certs/ca certs/server-certs certs/agent-certs certs/postgres-tls
@@ -64,8 +81,18 @@ certs:
 	echo "subjectAltName=DNS:postgres-postgresql" > ./certs/postgres-tls/san.ext
 	openssl x509 -req -in ./certs/postgres-tls/tls.csr -CA ./certs/ca/ca.crt -CAkey ./certs/ca/ca.key -CAcreateserial -out ./certs/postgres-tls/tls.crt -days 365 -extfile ./certs/postgres-tls/san.ext > /dev/null 2>&1
 
-integration: kind load-kind install
-	go test -v -count=1 ./integration/... -vet=off -args --ginkgo.randomize-all
+integration: integration-calico integration-cilium
+
+integration-calico: kind-calico load-kind install-calico setup-integration-tests
+	helm upgrade --install dev ./helm --values ./integration/fixtures/values-files/calico-policy-agent.yaml --wait --namespace default
+	kubectl wait --for=condition=available --timeout=60s deployment/policy-server -n default
+	CNI=calico go test -v -count=1 ./integration/... -vet=off -args --ginkgo.randomize-all
 	@$(MAKE) delete-kind
 
-.PHONY: build image unit lint generate kind delete-kind load-kind install integration certs
+integration-cilium: kind-cilium load-kind install-cilium setup-integration-tests
+	helm upgrade --install dev ./helm --values ./integration/fixtures/values-files/cilium-policy-agent.yaml --wait --namespace default
+	kubectl wait --for=condition=available --timeout=60s deployment/policy-server -n default
+	CNI=cilium go test -v -count=1 ./integration/... -vet=off -args --ginkgo.randomize-all
+	@$(MAKE) delete-kind
+
+.PHONY: build image unit lint generate kind delete-kind load-kind install-calico install-cilium integration-calico integration-cilium certs setup-integration-tests

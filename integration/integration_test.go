@@ -9,6 +9,7 @@ import (
 	ciliumv2 "github.com/cilium/cilium/pkg/k8s/apis/cilium.io/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	projectcalicoapi "github.com/projectcalico/api/pkg/apis/projectcalico/v3"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	corev1 "k8s.io/api/core/v1"
@@ -20,9 +21,12 @@ import (
 
 func init() {
 	utilruntime.Must(ciliumv2.AddToScheme(scheme.Scheme))
+	utilruntime.Must(projectcalicoapi.AddToScheme(scheme.Scheme))
 }
 
 var clt client.Client
+
+const cniEnvironmentVariable = "CNI"
 
 var _ = Describe("PolicyAgent", Ordered, func() {
 	var echoContainer testcontainers.Container
@@ -352,10 +356,21 @@ func waitForWorkloads() {
 
 func waitForPolicies(expected int) {
 	EventuallyWithOffset(1, func() int {
-		policies := &ciliumv2.CiliumNetworkPolicyList{}
-		err := clt.List(context.Background(), policies, &client.ListOptions{})
-		ExpectWithOffset(1, err).NotTo(HaveOccurred())
-		return len(policies.Items)
+		switch os.Getenv(cniEnvironmentVariable) {
+		case "cilium":
+			policies := &ciliumv2.CiliumNetworkPolicyList{}
+			err := clt.List(context.Background(), policies, &client.ListOptions{Namespace: "cf-workloads"})
+			ExpectWithOffset(1, err).NotTo(HaveOccurred())
+			return len(policies.Items)
+		case "calico":
+			policies := &projectcalicoapi.NetworkPolicyList{}
+			err := clt.List(context.Background(), policies, &client.ListOptions{Namespace: "cf-workloads"})
+			ExpectWithOffset(1, err).NotTo(HaveOccurred())
+			return len(policies.Items)
+		default:
+			Fail(fmt.Sprintf("unsupported or missing %s environment variable; expected cilium or calico", cniEnvironmentVariable))
+			return 0
+		}
 	}, "30s", "1s").To(Equal(expected))
 }
 
