@@ -93,6 +93,30 @@ var _ = Describe("Translator", func() {
 	})
 
 	Describe("ASG selectors", func() {
+		It("creates a staging-only selector", func() {
+			translated := translate(policy.SecurityGroup{StagingDefault: true})
+			Expect(translated.Specs).To(HaveLen(1))
+			Expect(translated.Specs[0].EndpointSelector.LabelSelector.MatchExpressions).To(ContainElement(slimv1.LabelSelectorRequirement{Key: "cloudfoundry.org/source-type", Operator: slimv1.LabelSelectorOpIn, Values: []string{"STG"}}))
+		})
+
+		It("creates a running-only selector", func() {
+			translated := translate(policy.SecurityGroup{RunningDefault: true})
+			Expect(translated.Specs[0].EndpointSelector.LabelSelector.MatchExpressions).To(ContainElement(slimv1.LabelSelectorRequirement{Key: "cloudfoundry.org/source-type", Operator: slimv1.LabelSelectorOpNotIn, Values: []string{"STG"}}))
+		})
+
+		It("creates selectors for running and staging spaces independently", func() {
+			translated := translate(policy.SecurityGroup{RunningSpaceGuids: []string{"guid1", "guid2"}, StagingSpaceGuids: []string{"guid1", "guid2"}})
+			Expect(translated.Specs).To(HaveLen(2))
+			Expect(translated.Specs[0].EndpointSelector.LabelSelector.MatchExpressions).To(ContainElements(
+				slimv1.LabelSelectorRequirement{Key: "cloudfoundry.org/space-guid", Operator: slimv1.LabelSelectorOpIn, Values: []string{"guid1", "guid2"}},
+				slimv1.LabelSelectorRequirement{Key: "cloudfoundry.org/source-type", Operator: slimv1.LabelSelectorOpNotIn, Values: []string{"STG"}},
+			))
+			Expect(translated.Specs[1].EndpointSelector.LabelSelector.MatchExpressions).To(ContainElements(
+				slimv1.LabelSelectorRequirement{Key: "cloudfoundry.org/space-guid", Operator: slimv1.LabelSelectorOpIn, Values: []string{"guid1", "guid2"}},
+				slimv1.LabelSelectorRequirement{Key: "cloudfoundry.org/source-type", Operator: slimv1.LabelSelectorOpIn, Values: []string{"STG"}},
+			))
+		})
+
 		It("creates default selectors", func() {
 			translated := translate(policy.SecurityGroup{StagingDefault: true, RunningDefault: true})
 			Expect(translated.Specs).To(HaveLen(1))

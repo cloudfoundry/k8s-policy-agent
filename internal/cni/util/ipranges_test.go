@@ -41,4 +41,13 @@ var _ = Describe("RangeToCIDRs", func() {
 			"10.0.0.5/32",
 		}),
 	)
+
+	DescribeTable("invalid IP ranges", func(ipRange string) {
+		_, err := util.RangeToCIDRs(ipRange)
+		Expect(err).To(HaveOccurred())
+	},
+		Entry("invalid IP addresses", "10.0.0.256-10.0.0.257"),
+		Entry("reversed range", "10.0.0.10-10.0.0.5"),
+		Entry("missing range separator", "10.0.0.1"),
+	)
 })

@@ -99,6 +99,21 @@ var _ = Describe("Translator", func() {
 	})
 
 	Describe("ASG selectors", func() {
+		It("creates a staging-only selector", func() {
+			translated := translate(policy.SecurityGroup{Guid: "guid", StagingDefault: true})
+			Expect(translated.Spec.Selector).To(Equal(`cloudfoundry.org/source-type == "STG"`))
+		})
+
+		It("creates a running-only selector", func() {
+			translated := translate(policy.SecurityGroup{Guid: "guid", RunningDefault: true})
+			Expect(translated.Spec.Selector).To(Equal(`cloudfoundry.org/source-type != "STG"`))
+		})
+
+		It("creates selectors for running and staging spaces independently", func() {
+			translated := translate(policy.SecurityGroup{Guid: "guid", RunningSpaceGuids: []string{"guid1", "guid2"}, StagingSpaceGuids: []string{"guid1", "guid2"}})
+			Expect(translated.Spec.Selector).To(Equal(`(cloudfoundry.org/space-guid in {"guid1", "guid2"} && cloudfoundry.org/source-type != "STG") || (cloudfoundry.org/space-guid in {"guid1", "guid2"} && cloudfoundry.org/source-type == "STG")`))
+		})
+
 		It("creates selectors for staging and running defaults", func() {
 			translated := translate(policy.SecurityGroup{Guid: "guid", StagingDefault: true, RunningDefault: true, Rules: []policy.SecurityGroupRule{{Destination: "10.0.0.1", Protocol: "all"}}})
 			Expect(translated.Spec.Selector).To(Equal(`has(cloudfoundry.org/app-guid)`))
