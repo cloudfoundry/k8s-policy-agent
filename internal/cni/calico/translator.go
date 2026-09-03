@@ -270,7 +270,7 @@ func createCalicoEgressSelectorFromASG(asg policy.SecurityGroup) string {
 	if len(asg.StagingSpaceGuids) > 0 {
 		selectors = append(selectors, fmt.Sprintf("(%s && %s)",
 			inSelector(types.SpaceGUIDLabelKey, asg.StagingSpaceGuids),
-			notEqualsSelector(sourceTypeLabelKey, stagingSourceType),
+			equalsSelector(sourceTypeLabelKey, stagingSourceType),
 		))
 	}
 
