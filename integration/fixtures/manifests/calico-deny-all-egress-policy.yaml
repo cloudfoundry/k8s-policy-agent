@@ -1,0 +1,13 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: deny-all-egress
+spec:
+  selector: has(cloudfoundry.org/app-guid)
+  types:
+    - Egress
+  egress:
+    - action: Deny
+      destination:
+        nets:
+          - 172.0.0.0/24

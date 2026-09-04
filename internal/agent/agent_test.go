@@ -7,6 +7,7 @@ import (
 
 	"code.cloudfoundry.org/k8s-policy-agent/internal/agent"
 	"code.cloudfoundry.org/k8s-policy-agent/internal/agent/agentfakes"
+	"code.cloudfoundry.org/k8s-policy-agent/internal/cni"
 	agentconfig "code.cloudfoundry.org/k8s-policy-agent/internal/config"
 	"code.cloudfoundry.org/k8s-policy-agent/internal/reconciler"
 
@@ -43,6 +44,7 @@ var _ = Describe("Agent", func() {
 		fakeReconciler     reconciler.Reconciler
 		fakeClient         ctrlclient.Client
 		fakeRuntimeManager *agentfakes.FakeRuntimeManager
+		translator         cni.Translator
 	)
 
 	BeforeEach(func() {
@@ -51,16 +53,20 @@ var _ = Describe("Agent", func() {
 
 		config = &agentconfig.Config{
 			Namespace:    "default",
+			CNI:          "cilium",
 			PollInterval: 1 * time.Second,
 		}
 
 		fakePolicyClient = &agentfakes.FakePolicyServerClient{}
 		fakeClient = fake.NewFakeClient()
 
+		translator = cni.NewTranslator(config.CNI, config.Namespace)
+
 		fakeRuntimeManager = &agentfakes.FakeRuntimeManager{}
 		fakeRuntimeManager.KubernetesClientReturns(fakeClient)
+		fakeRuntimeManager.TranslatorReturns(translator)
 
-		fakeReconciler = reconciler.New(fakeClient, config, logger)
+		fakeReconciler = reconciler.New(fakeClient, translator, config, logger)
 		ctx, cancel = context.WithCancel(context.Background())
 	})
 

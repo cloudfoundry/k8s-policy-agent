@@ -40,7 +40,7 @@ func main() {
 		logger.Fatal("failed to initialize policy server client", err)
 	}
 
-	networkPolicyReconciler := reconciler.New(runtimeManager.KubernetesClient(), cfg, logger)
+	networkPolicyReconciler := reconciler.New(runtimeManager.KubernetesClient(), runtimeManager.Translator(), cfg, logger)
 	policyAgent := agent.New(runtimeManager.KubernetesClient(), policyClient, networkPolicyReconciler, cfg, logger)
 
 	if err := runtimeManager.Add(policyAgent); err != nil {
