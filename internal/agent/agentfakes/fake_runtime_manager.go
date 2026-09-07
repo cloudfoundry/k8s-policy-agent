@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"code.cloudfoundry.org/k8s-policy-agent/internal/agent"
-
+	"code.cloudfoundry.org/k8s-policy-agent/internal/cni"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
@@ -43,6 +43,16 @@ type FakeRuntimeManager struct {
 	}
 	startReturnsOnCall map[int]struct {
 		result1 error
+	}
+	TranslatorStub        func() cni.Translator
+	translatorMutex       sync.RWMutex
+	translatorArgsForCall []struct {
+	}
+	translatorReturns struct {
+		result1 cni.Translator
+	}
+	translatorReturnsOnCall map[int]struct {
+		result1 cni.Translator
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
@@ -220,6 +230,59 @@ func (fake *FakeRuntimeManager) StartReturnsOnCall(i int, result1 error) {
 	}
 	fake.startReturnsOnCall[i] = struct {
 		result1 error
+	}{result1}
+}
+
+func (fake *FakeRuntimeManager) Translator() cni.Translator {
+	fake.translatorMutex.Lock()
+	ret, specificReturn := fake.translatorReturnsOnCall[len(fake.translatorArgsForCall)]
+	fake.translatorArgsForCall = append(fake.translatorArgsForCall, struct {
+	}{})
+	stub := fake.TranslatorStub
+	fakeReturns := fake.translatorReturns
+	fake.recordInvocation("Translator", []interface{}{})
+	fake.translatorMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *FakeRuntimeManager) TranslatorCallCount() int {
+	fake.translatorMutex.RLock()
+	defer fake.translatorMutex.RUnlock()
+	return len(fake.translatorArgsForCall)
+}
+
+func (fake *FakeRuntimeManager) TranslatorCalls(stub func() cni.Translator) {
+	fake.translatorMutex.Lock()
+	defer fake.translatorMutex.Unlock()
+	fake.TranslatorStub = stub
+}
+
+func (fake *FakeRuntimeManager) TranslatorReturns(result1 cni.Translator) {
+	fake.translatorMutex.Lock()
+	defer fake.translatorMutex.Unlock()
+	fake.TranslatorStub = nil
+	fake.translatorReturns = struct {
+		result1 cni.Translator
+	}{result1}
+}
+
+func (fake *FakeRuntimeManager) TranslatorReturnsOnCall(i int, result1 cni.Translator) {
+	fake.translatorMutex.Lock()
+	defer fake.translatorMutex.Unlock()
+	fake.TranslatorStub = nil
+	if fake.translatorReturnsOnCall == nil {
+		fake.translatorReturnsOnCall = make(map[int]struct {
+			result1 cni.Translator
+		})
+	}
+	fake.translatorReturnsOnCall[i] = struct {
+		result1 cni.Translator
 	}{result1}
 }
 

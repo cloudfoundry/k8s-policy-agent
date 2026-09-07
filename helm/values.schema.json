@@ -8,6 +8,9 @@
     "global": {
       "type": "object"
     },
+    "cni": {
+      "type": "string"
+    },
     "image": {
       "additionalProperties": false,
       "properties": {

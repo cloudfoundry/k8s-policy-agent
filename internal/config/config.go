@@ -14,6 +14,7 @@ const (
 	DefaultTLSCertPath           = "/etc/ssl/certs/policy-agent/tls.crt"
 	DefaultTLSKeyPath            = "/etc/ssl/certs/policy-agent/tls.key"
 	DefaultTLSCAPath             = "/etc/ssl/certs/policy-agent/ca.crt"
+	DefaultCNI                   = "cilium"
 )
 
 type Config struct {
@@ -24,6 +25,7 @@ type Config struct {
 	TLSCertPath           string
 	TLSKeyPath            string
 	TLSCAPath             string
+	CNI                   string
 }
 
 func Load() *Config {
@@ -35,6 +37,7 @@ func Load() *Config {
 		TLSCertPath:           getEnvOrDefault("TLS_CERT_PATH", DefaultTLSCertPath),
 		TLSKeyPath:            getEnvOrDefault("TLS_KEY_PATH", DefaultTLSKeyPath),
 		TLSCAPath:             getEnvOrDefault("TLS_CA_PATH", DefaultTLSCAPath),
+		CNI:                   getEnvOrDefault("CNI", DefaultCNI),
 	}
 }
 

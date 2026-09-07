@@ -40,6 +40,7 @@ var _ = Describe("Config", func() {
 				"TLS_CERT_PATH":            "/custom/cert",
 				"TLS_KEY_PATH":             "/custom/key",
 				"TLS_CA_PATH":              "/custom/ca",
+				"CNI":                      "foo",
 			}, &config.Config{
 				PolicyServerURL:       "http://example.com",
 				Namespace:             "custom-ns",
@@ -48,6 +49,7 @@ var _ = Describe("Config", func() {
 				TLSCertPath:           "/custom/cert",
 				TLSKeyPath:            "/custom/key",
 				TLSCAPath:             "/custom/ca",
+				CNI:                   "foo",
 			}),
 			Entry("only required variable set, defaults applied", map[string]string{
 				"POLICY_SERVER_URL": "http://example.com",
@@ -59,6 +61,7 @@ var _ = Describe("Config", func() {
 				TLSCertPath:           config.DefaultTLSCertPath,
 				TLSKeyPath:            config.DefaultTLSKeyPath,
 				TLSCAPath:             config.DefaultTLSCAPath,
+				CNI:                   config.DefaultCNI,
 			}),
 		)
 

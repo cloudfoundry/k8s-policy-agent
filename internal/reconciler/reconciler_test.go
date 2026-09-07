@@ -5,6 +5,7 @@ import (
 	"context"
 	"io"
 
+	"code.cloudfoundry.org/k8s-policy-agent/internal/cni"
 	agentconfig "code.cloudfoundry.org/k8s-policy-agent/internal/config"
 	"code.cloudfoundry.org/k8s-policy-agent/internal/reconciler"
 
@@ -34,6 +35,7 @@ var _ = Describe("Reconciler", func() {
 		logger     lager.Logger
 		config     *agentconfig.Config
 		fakeClient ctrlclient.Client
+		translator cni.Translator
 	)
 
 	BeforeEach(func() {
@@ -45,11 +47,12 @@ var _ = Describe("Reconciler", func() {
 		}
 
 		fakeClient = fake.NewFakeClient()
+		translator = cni.NewTranslator("cilium", config.Namespace)
 	})
 
 	Describe("New", func() {
 		It("creates a Reconciler instance", func() {
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 			Expect(reconciler).NotTo(BeNil())
 		})
 	})
@@ -78,7 +81,7 @@ var _ = Describe("Reconciler", func() {
 					},
 				},
 			)
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 
 			Expect(reconciler.Reconcile(nil, nil)).To(BeNil())
 
@@ -88,7 +91,7 @@ var _ = Describe("Reconciler", func() {
 		})
 
 		It("should raise error for noop policy", func() {
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 
 			Expect(reconciler.Reconcile([]policy.SecurityGroup{
 				{
@@ -105,7 +108,7 @@ var _ = Describe("Reconciler", func() {
 		})
 
 		It("creates new security groups and C2C policies", func() {
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 			Expect(reconciler.Reconcile([]policy.SecurityGroup{
 				{
 					Guid: "tcp",
@@ -295,7 +298,7 @@ var _ = Describe("Reconciler", func() {
 			}
 			fakeClient = fake.NewFakeClient(asgPolicy, c2cPolicy)
 
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 			Expect(reconciler.Reconcile([]policy.SecurityGroup{
 				{
 					Guid:           "tcp",
@@ -412,7 +415,7 @@ var _ = Describe("Reconciler", func() {
 			logger.RegisterSink(lager.NewWriterSink(&logBuffer, lager.DEBUG))
 
 			fakeClient = fake.NewFakeClient(ciliumPolicy)
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 			Expect(reconciler.Reconcile(asg, []*policy.Policy{})).To(Succeed())
 
 			logs := logBuffer.String()
@@ -420,7 +423,7 @@ var _ = Describe("Reconciler", func() {
 		})
 
 		It("aggregates multiple C2C policies for the same source and destination", func() {
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 
 			policies := []*policy.Policy{
 				{
@@ -454,7 +457,7 @@ var _ = Describe("Reconciler", func() {
 		})
 
 		It("creates separate egress rules for different C2C destinations", func() {
-			reconciler := reconciler.New(fakeClient, config, logger)
+			reconciler := reconciler.New(fakeClient, translator, config, logger)
 
 			policies := []*policy.Policy{
 				{
