@@ -82,6 +82,7 @@ jobs:
       run: make image
 
   integration:
+    name: ${{ matrix.cni }}
     runs-on: ubuntu-latest
     needs: [lint, unit, build]
     strategy:
