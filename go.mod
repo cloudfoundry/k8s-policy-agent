@@ -9,7 +9,7 @@ require (
 	code.cloudfoundry.org/policy_client v0.118.0
 	code.cloudfoundry.org/tlsconfig v0.66.0
 	github.com/cilium/cilium v1.20.1
-	github.com/onsi/ginkgo/v2 v2.32.1
+	github.com/onsi/ginkgo/v2 v2.32.2
 	github.com/onsi/gomega v1.43.0
 	github.com/projectcalico/api v0.0.0-20260629014411-77a2372ddd1c
 	github.com/testcontainers/testcontainers-go v0.44.0
