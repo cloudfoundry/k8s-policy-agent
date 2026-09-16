@@ -8,7 +8,7 @@ require (
 	code.cloudfoundry.org/lager/v3 v3.86.0
 	code.cloudfoundry.org/policy_client v0.119.0
 	code.cloudfoundry.org/tlsconfig v0.66.0
-	github.com/cilium/cilium v1.20.1
+	github.com/cilium/cilium v1.20.2
 	github.com/onsi/ginkgo/v2 v2.32.2
 	github.com/onsi/gomega v1.43.0
 	github.com/projectcalico/api v0.0.0-20260629014411-77a2372ddd1c
@@ -34,7 +34,7 @@ require (
 	github.com/cilium/ebpf v0.22.0 // indirect
 	github.com/cilium/hive v1.0.4 // indirect
 	github.com/cilium/lumberjack/v2 v2.4.2 // indirect
-	github.com/cilium/statedb v0.8.3 // indirect
+	github.com/cilium/statedb v0.8.4 // indirect
 	github.com/cilium/stream v0.0.1 // indirect
 	github.com/containerd/errdefs v1.0.0 // indirect
 	github.com/containerd/errdefs/pkg v0.3.0 // indirect
