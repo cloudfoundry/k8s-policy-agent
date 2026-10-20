@@ -1,11 +1,11 @@
 cel.dev/expr v0.25.2 h1:K6j46C81hXtZQfuX60cVWQFBJahKSE2gfRbNuvr5bFs=
 cel.dev/expr v0.25.2/go.mod h1:hrXvqGP6G6gyx8UAHSHJ5RGk//1Oj5nXQ2NI02Nrsg4=
-code.cloudfoundry.org/cf-networking-helpers v0.99.0 h1:+h+uybD0d3t6jn4sdaHtcih6yfGtQYWlzHCGgwi3sjM=
-code.cloudfoundry.org/cf-networking-helpers v0.99.0/go.mod h1:DvUxOpxjT40wfVHLAud7pU/rNuFaoSDlFhF7rtexAaw=
+code.cloudfoundry.org/cf-networking-helpers v0.100.0 h1:iTLcHc5oA6mYe4DziObsBM0kODJZ0EC94OMqQcrdVVc=
+code.cloudfoundry.org/cf-networking-helpers v0.100.0/go.mod h1:NU0z5XwqWjSI396lmd9HuQsH7ofa9lGSMyINcUzYyxk=
 code.cloudfoundry.org/lager/v3 v3.91.0 h1:9Ydc9QENtQ0tI0hqdIrYVHtM7g0Vou8xG5kPAFxWVNI=
 code.cloudfoundry.org/lager/v3 v3.91.0/go.mod h1:j4v5jKYn/nRqOCkL9XoSRmDnjpZH5fITFrlK6veKIBs=
-code.cloudfoundry.org/policy_client v0.123.0 h1:ToRTvuVuoNjWPPT/CAzTtwAU6YF8kk3rtVXzEsSMreg=
-code.cloudfoundry.org/policy_client v0.123.0/go.mod h1:hkydBDjLY+Hmexm/PFkWDKXiwfakq5huJNk2mZQ0HDc=
+code.cloudfoundry.org/policy_client v0.124.0 h1:XrmijJfvhvx/JGcOIgsRse9OWu0DDuu+hltQNURRdjU=
+code.cloudfoundry.org/policy_client v0.124.0/go.mod h1:spBzvu8y32tbztBOZp0LH2HH39gasnz+lbVVV9O840o=
 code.cloudfoundry.org/tlsconfig v0.69.0 h1:bvlvdU2BKiSEcgeiv0Csomzmq7Gn8vGU4yeNXy5FN2M=
 code.cloudfoundry.org/tlsconfig v0.69.0/go.mod h1:gKv5uSKC6EUgBllA7qDmXPYRz8sJaV3BWpCMsg24R8I=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
@@ -178,8 +178,8 @@ github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/google/gofuzz v1.2.0 h1:xRy4A+RhZaiKjJ1bPfwQ8sedCA+YS2YcCHW6ec7JMi0=
 github.com/google/gofuzz v1.2.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
-github.com/google/pprof v0.0.0-20261012231050-2af12c3f4d87 h1:P18JvwDzBYAeC8SIfnee/YJzKk1dysuN6rUwmF6CxZY=
-github.com/google/pprof v0.0.0-20261012231050-2af12c3f4d87/go.mod h1:yUo1AMMpsPIDFGuwDK8nLcf8+vvAd5l2O6JDZ6hpwrM=
+github.com/google/pprof v0.0.0-20261016150608-1facf8f91b50 h1:PlNWJRxu5APSV0pWqfIsZ0qt9OOGHSWfZQ4zvx+WgWs=
+github.com/google/pprof v0.0.0-20261016150608-1facf8f91b50/go.mod h1:yUo1AMMpsPIDFGuwDK8nLcf8+vvAd5l2O6JDZ6hpwrM=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/hashicorp/golang-lru/v2 v2.0.7 h1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs4luLUK2k=
