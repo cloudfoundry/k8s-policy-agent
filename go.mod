@@ -5,8 +5,8 @@ go 1.26.4
 tool github.com/maxbrunsfeld/counterfeiter/v6
 
 require (
-	code.cloudfoundry.org/lager/v3 v3.91.0
-	code.cloudfoundry.org/policy_client v0.124.0
+	code.cloudfoundry.org/lager/v3 v3.93.0
+	code.cloudfoundry.org/policy_client v0.126.0
 	code.cloudfoundry.org/tlsconfig v0.69.0
 	github.com/cilium/cilium v1.20.3
 	github.com/onsi/ginkgo/v2 v2.33.1
@@ -22,7 +22,7 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/cf-networking-helpers v0.100.0 // indirect
+	code.cloudfoundry.org/cf-networking-helpers v0.101.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
@@ -82,7 +82,7 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20261016150608-1facf8f91b50 // indirect
+	github.com/google/pprof v0.0.0-20261026192309-dbd0ed30aa88 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
@@ -147,11 +147,11 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
-	go.yaml.in/yaml/v3 v3.0.5 // indirect
+	go.yaml.in/yaml/v3 v3.0.6 // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
 	golang.org/x/crypto v0.58.0 // indirect
 	golang.org/x/mod v0.42.0 // indirect
-	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
