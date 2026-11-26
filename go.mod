@@ -7,7 +7,7 @@ tool github.com/maxbrunsfeld/counterfeiter/v6
 require (
 	code.cloudfoundry.org/lager/v3 v3.96.0
 	code.cloudfoundry.org/policy_client v0.129.0
-	code.cloudfoundry.org/tlsconfig v0.70.0
+	code.cloudfoundry.org/tlsconfig v0.74.0
 	github.com/cilium/cilium v1.20.5
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
