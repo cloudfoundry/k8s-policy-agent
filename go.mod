@@ -13,9 +13,9 @@ require (
 	github.com/onsi/gomega v1.44.0
 	github.com/projectcalico/api v0.0.0-20261109164636-b7f454a7c9f3
 	github.com/testcontainers/testcontainers-go v0.44.0
-	k8s.io/api v0.37.2
-	k8s.io/apimachinery v0.37.2
-	k8s.io/client-go v0.37.2
+	k8s.io/api v0.37.3
+	k8s.io/apimachinery v0.37.3
+	k8s.io/client-go v0.37.3
 	k8s.io/klog/v2 v2.140.0
 	k8s.io/utils v0.0.0-20261023123148-ca04ba58ecab
 	sigs.k8s.io/controller-runtime v0.25.3
