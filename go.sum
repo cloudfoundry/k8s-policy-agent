@@ -6,8 +6,8 @@ code.cloudfoundry.org/lager/v3 v3.96.0 h1:DdtF0GmQGtQFo3MsQ4TVKzXek3lxExLIx6RLJV
 code.cloudfoundry.org/lager/v3 v3.96.0/go.mod h1:9EbkTFyH//ebfoq9naFQ3mAWoICgsQMjpgMwjxVV3ik=
 code.cloudfoundry.org/policy_client v0.129.0 h1:bxxKLu6CHJd8fWMXGcOfsv0A8OD7u4nxqW9ISYFjpd0=
 code.cloudfoundry.org/policy_client v0.129.0/go.mod h1:s9K/8TV9K6OlGIXTQyOO6rKd44I5/UCHH4B9ZqJvoi4=
-code.cloudfoundry.org/tlsconfig v0.70.0 h1:QsR1Ys8j/UcsQmAn8Zv+5BNC4pT66BZmxl+juTPdPvg=
-code.cloudfoundry.org/tlsconfig v0.70.0/go.mod h1:BFWFL5mEhEorvMWj6Pc9qxHJMWkU5UN15DYQ8vHCbk0=
+code.cloudfoundry.org/tlsconfig v0.74.0 h1:X3SE2zSCNsRoegpGHGh3XrgAyL0AtARUphRq36cPK9s=
+code.cloudfoundry.org/tlsconfig v0.74.0/go.mod h1:907rmG2JczfH+ZIn4hp7gtPK7jY/yWbp8LIPpCd08Hk=
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
 dario.cat/mergo v1.0.2/go.mod h1:E/hbnu0NxMFBjpMIE34DRGLWqDy0g5FuKDhCb31ngxA=
 filippo.io/edwards25519 v1.2.0 h1:crnVqOiS4jqYleHd9vaKZ+HKtHfllngJIiOpNpoJsjo=
@@ -364,8 +364,8 @@ go.opentelemetry.io/otel/sdk/metric v1.47.0 h1:lfISg2j93VT6yqdk9OfUaZmw/GfcZqCCV
 go.opentelemetry.io/otel/sdk/metric v1.47.0/go.mod h1:ypLp+mW1Nt2x+Szt3b5/i1syodyts49lMOwxpDI3VGw=
 go.opentelemetry.io/otel/trace v1.47.0 h1:JOjX/Oci8K94QHddo+bbfya/Ai/nf6/dt9ZfrFNWSrM=
 go.opentelemetry.io/otel/trace v1.47.0/go.mod h1:jNaSLa2PZEYFG6fRjJABAu+bw4FS08uDmPg28lTghu0=
-go.step.sm/crypto v0.92.0 h1:ifhnf9D2X12SokY000OL9GX038hJJ1xfoFzyX7FzgAs=
-go.step.sm/crypto v0.92.0/go.mod h1:3ypkxvcrqPtpvPhRpNgHwoNQcJfFqWd401rxKbrlO5s=
+go.step.sm/crypto v0.92.1 h1:MCRS9ZxvGz/nEy+VFDUuGbYuB6qTzP11fvrlh/ymv84=
+go.step.sm/crypto v0.92.1/go.mod h1:dg6N76FFDptHIQ/Y85UcKEHBNpld5C3A1ry/zM71BlI=
 go.uber.org/dig v1.17.1 h1:Tga8Lz8PcYNsWsyHMZ1Vm0OQOUaJNDyvPImgbAu9YSc=
 go.uber.org/dig v1.17.1/go.mod h1:Us0rSJiThwCv2GteUN0Q7OKvU7n5J4dxZ9JKUXozFdE=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
